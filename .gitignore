@@ -1,4 +1,9 @@
-# IDE configurations
-.idea/
-out/
+# ide files
+
+.idea
+*.iml
+
+# output files
+
+out
 
