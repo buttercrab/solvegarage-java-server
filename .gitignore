@@ -10,3 +10,7 @@ out
 # library files
 
 lib
+
+# ds store
+
+.DS_Store
