@@ -1,4 +1,7 @@
-package Util;
+package util;
+
+import server.Commands;
+import server.Server;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -41,6 +44,7 @@ public class Util {
                 if (parameters.containsKey(key)) {
                     Object obj = parameters.get(key);
                     if (obj instanceof List<?>) {
+                        @SuppressWarnings("unchecked")
                         List<String> values = (List<String>) obj;
                         values.add(value);
                     } else if (obj instanceof String) {
@@ -54,5 +58,16 @@ public class Util {
                 }
             }
         }
+    }
+
+    /**
+     * Wrapper function to log to stdout
+     * @see Commands
+     *
+     * @param s String to log to stdout
+     */
+
+    public static void log(String s, int type) {
+        ((Commands) Server.cmd).log(s, type);
     }
 }

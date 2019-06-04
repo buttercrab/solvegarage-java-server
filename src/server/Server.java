@@ -1,19 +1,30 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
+import database.Database;
+import util.Util;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class Server {
 
-    public static int port = 3080;
+    private static int port = 3080;
+    public static Database db = new Database();
+    public static Thread cmd = new Commands();
+    static HttpServer server;
 
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+        Server.db.init("buttercrab", args[0]);
+        Server.cmd.start();
 
-        server.createContext("/login", new Login());
+        Server.server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        server.start();
+        Server.server.createContext("/login", new Login());
+
+        Server.server.start();
+
+        Util.log("Server started on port " + Server.port, Commands.LOG);
     }
 }
+
