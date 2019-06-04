@@ -14,6 +14,12 @@ public class Commands extends Thread {
 
     private boolean finished = false;
 
+    /**
+     * New thread function to get data from stdin and do some stuffs.
+     * It would loop forever unless the server is finished by other function.
+     * {@link Commands#quit()}
+     */
+
     @Override
     public void run() {
         Scanner sc = new Scanner(System.in);

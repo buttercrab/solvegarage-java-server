@@ -16,7 +16,8 @@ public class Login implements HttpHandler {
     /**
      * This method is used for handling login requests.
      * Using POST method, gets login data from client
-     * and checks the user database.
+     * and checks the user database login function.
+     * {@link database.Database#login(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * `pw`, and `key` property.

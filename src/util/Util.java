@@ -65,10 +65,11 @@ public class Util {
     /**
      * Wrapper function of logging function
      *
+     * @see Commands#log(String, String, int)
+     *
      * @param from String of where command has logged
      * @param s    String to log
      * @param type type to log (differs the color)
-     * @see Commands
      */
 
     public static void log(String from, String s, int type) {

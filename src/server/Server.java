@@ -10,12 +10,19 @@ import java.net.InetSocketAddress;
 public class Server {
 
     private static int port = 3080;
-    public static Database db = new Database();
+    static Database db = new Database();
     public static Thread cmd = new Commands();
     static HttpServer server;
 
+    /**
+     * Main function of this server. It starts the server and connect to MySQL database.
+     *
+     * @param args arguments when stating the server
+     * @throws IOException exception when creating the http server.
+     */
+
     public static void main(String[] args) throws IOException {
-        Server.db.init("buttercrab", args[0]);
+        Server.db.init(args[0], args[1]);
         Server.cmd.start();
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);

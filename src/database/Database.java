@@ -12,7 +12,8 @@ public class Database {
     private Statement st = null;
 
     /**
-     * Connects to local MySQL server and make connection and statement
+     * Connects to local MySQL server and make connection and statement.
+     * Have to be called when starting the server.
      *
      * @param id id to login to local MySQL server
      * @param pw password to login to local MySQL server
@@ -81,6 +82,16 @@ public class Database {
         return "{'success':false,'code':0}";
     }
 
+    /**
+     * Does similar thing with login function. {@link Database#login(String, String)}
+     * It login with token instead of password. It has same response data format.
+     * It would regenerate the token and send back the new token.
+     *
+     * @param id    id to login
+     * @param token token to login
+     * @return String with JSON format with response data.
+     */
+
     public synchronized String loginWithToken(String id, String token) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
@@ -107,8 +118,14 @@ public class Database {
 
     }
 
+    /**
+     * Close the connection to MySQL server.
+     * Used when shutting down the server.
+     */
+
     public void quit() {
         try {
+            this.st.close();
             this.conn.close();
         } catch (SQLException e) {
             Util.log("database", "Error closing database connection", Commands.ERR);
