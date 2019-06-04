@@ -24,7 +24,7 @@ public class Server {
 
         Server.server.start();
 
-        Util.log("Server started on port " + Server.port, Commands.LOG);
+        Util.log("server", "Server started on port " + Server.port, Commands.LOG);
     }
 }
 

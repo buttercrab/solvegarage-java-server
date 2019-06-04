@@ -8,6 +8,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Util {
 
@@ -60,14 +61,59 @@ public class Util {
         }
     }
 
+
     /**
-     * Wrapper function to log to stdout
-     * @see Commands
+     * Wrapper function of logging function
      *
-     * @param s String to log to stdout
+     * @param from String of where command has logged
+     * @param s    String to log
+     * @param type type to log (differs the color)
+     * @see Commands
      */
 
-    public static void log(String s, int type) {
-        ((Commands) Server.cmd).log(s, type);
+    public static void log(String from, String s, int type) {
+        ((Commands) Server.cmd).log(from, s, type);
+    }
+
+    /**
+     * Generates the random string contains 0-9, A-Z, a-z
+     * Format of `{user id}:{random string}:{generated time}`
+     *
+     * @param id id to append to token
+     * @return generated token
+     */
+
+    public static String generateToken(String id) {
+        Random rnd = new Random();
+        StringBuilder res = new StringBuilder(id);
+        res.append(":");
+        for (int i = 0; i < 30; i++) {
+            int r = rnd.nextInt(62);
+            if (r < 10)
+                res.append((char) (48 + r));
+            else if (r < 36)
+                res.append((char) (65 + r - 10));
+            else
+                res.append((char) (97 + r - 36));
+        }
+        res.append(":");
+        res.append(System.currentTimeMillis());
+        return res.toString();
+    }
+
+    /**
+     * Validating tokens when requested
+     * check if it is same as saved and time passed
+     *
+     * @param token token to validate
+     * @param saved token saved on server
+     * @return true if it is validated token
+     */
+
+    public static boolean validateToken(String token, String saved) {
+        String[] savedParts = saved.split(":");
+        if (!token.equals(saved)) return false;
+        long curTiem = System.currentTimeMillis();
+        return Long.valueOf(savedParts[2]) <= curTiem && curTiem - Long.valueOf(savedParts[2]) < 24 * 60 * 60 * 1000;
     }
 }

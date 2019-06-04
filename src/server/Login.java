@@ -44,11 +44,8 @@ public class Login implements HttpHandler {
 
         String id = root.get("id").getAsString();
         String pw = root.get("pw").getAsString();
-        String key = root.get("key").getAsString();
 
-        //TODO
-
-        String res = "";
+        String res = Server.db.login(id, pw);
         exchange.sendResponseHeaders(200, res.length());
         OutputStream os = exchange.getResponseBody();
         os.write(res.getBytes());
