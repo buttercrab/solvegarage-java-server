@@ -60,7 +60,7 @@ public class Database {
         try {
             ResultSet rs = this.st.executeQuery("SELECT id FROM user_data WHERE id='" + id + "'");
             if (!rs.next()) {
-                String token = Util.generateToken(id);
+                String token = Util.token.generate(id);
                 this.st.executeUpdate("INSERT INTO user_data (id, pw, tk) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
                 return "{'success':true,'token':'" + token + "'}";
             }
@@ -94,11 +94,11 @@ public class Database {
 
     public synchronized String login(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT id, pw FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 String _pw = rs.getString("pw");
                 if (_pw.equals(pw)) {
-                    String token = Util.generateToken(id);
+                    String token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
                     return "{'success':true,'token':'" + token + "'}";
                 }
@@ -133,8 +133,8 @@ public class Database {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 String saved = rs.getString("tk");
-                if (!rs.wasNull() && Util.validateToken(token, saved)) {
-                    token = Util.generateToken(id);
+                if (!rs.wasNull() && Util.token.validate(token, saved)) {
+                    token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
                     return "{'success':true,'token':'" + token + "'}";
                 }
@@ -176,6 +176,40 @@ public class Database {
             return "{'success':false,'code':1}";
         } catch (SQLException e) {
             Util.log("database", "Error on logout with id: " + id, Commands.ERR);
+        }
+        return "{'success':false,'code':0}";
+    }
+
+    /**
+     * It removes the account from the database.
+     * It would send response data.
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: id is not found.
+     * <li> 2: password is not correct.
+     * </ul>
+     *
+     * @param id id to delete account
+     * @param pw password to the account
+     * @return String with JSON format with response data.
+     */
+
+    public synchronized String deleteAccount(String id, String pw) {
+        try {
+            ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
+            if (rs.next()) {
+                String p = rs.getString("pw");
+                if (p.equals(pw)) {
+                    this.st.executeUpdate("DELETE FROM user_data WHERE id='" + id + "'");
+                    return "{'success':true}";
+                }
+                return "{'success':false,'code':2}";
+            }
+            return "{'success':false,'code':1}";
+        } catch (SQLException e) {
+            Util.log("database", "Error on deleting an account: " + id, Commands.ERR);
         }
         return "{'success':false,'code':0}";
     }
