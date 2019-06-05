@@ -39,6 +39,14 @@ public class Logout implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        if (exchange.getRequestMethod().equals("GET")) {
+            exchange.sendResponseHeaders(200, Server.publicKey.length());
+            OutputStream os = exchange.getResponseBody();
+            os.write(Server.publicKey.getBytes());
+            os.close();
+            return;
+        }
+
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
 
         JsonParser parser = new JsonParser();
