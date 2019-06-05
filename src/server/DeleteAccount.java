@@ -13,6 +13,29 @@ import java.nio.charset.StandardCharsets;
 
 public class DeleteAccount implements HttpHandler {
 
+    /**
+     * This method is used for handling delete-account requests.
+     * Using POST method, gets the id and password to logout
+     * and calls the delete account function.
+     * {@link database.Database#deleteAccount(String, String)}
+     * <p>
+     * input is JSON object from client that has `id`,
+     * and `key` property.
+     * <ul>
+     * <li> `id` id to delete-account
+     * <li> `key` key to encrypt token when delete-account is success
+     * </ul>
+     * When the delete-account is success, it will send back
+     * JSON object that has `success` property
+     * <ul>
+     * <li> `success` true if delete-account succeeded
+     * <li> `code` failure code when delete-account failed
+     * </ul>
+     *
+     * @param exchange http exchange object
+     * @throws IOException from BufferedReader when input is not properly working.
+     */
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
