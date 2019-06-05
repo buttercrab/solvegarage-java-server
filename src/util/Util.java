@@ -123,11 +123,19 @@ public class Util {
     }
 
     /**
+     * Tool for RSA
+     *
      * @see <a href="https://gist.github.com/stunstunstun/8dbc82bd86f38c9232139e0ba9a7d8ad">
      * https://gist.github.com/stunstunstun/8dbc82bd86f38c9232139e0ba9a7d8ad</a>
      */
 
     public static class RSA {
+
+        /**
+         * Generates the RSA key pair length of 2048
+         *
+         * @return generated key pair
+         */
 
         public static KeyPair generateKeyPair() {
             try {
@@ -140,6 +148,13 @@ public class Util {
             return null;
         }
 
+        /**
+         * generates the public key from encoded key
+         *
+         * @param encodedPublicKey encoded public key
+         * @return generated public key
+         */
+
         private static PublicKey generatePublicKey(byte[] encodedPublicKey) {
             try {
                 return KeyFactory.getInstance("RSA").generatePublic(new PKCS8EncodedKeySpec(encodedPublicKey));
@@ -149,6 +164,13 @@ public class Util {
             return null;
         }
 
+        /**
+         * generates the private key from encoded key
+         *
+         * @param encodedPrivateKey encoded private key
+         * @return generated private key
+         */
+
         private static PrivateKey generatePrivateKey(byte[] encodedPrivateKey) {
             try {
                 return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encodedPrivateKey));
@@ -157,6 +179,14 @@ public class Util {
             }
             return null;
         }
+
+        /**
+         * encrypts the text given with public key
+         *
+         * @param plainText        text to encrypt
+         * @param encodedPublicKey encoded public key
+         * @return encrypted text with public key
+         */
 
         public static String encrypt(String plainText, byte[] encodedPublicKey) {
             PublicKey publicKey = RSA.generatePublicKey(encodedPublicKey);
@@ -171,6 +201,14 @@ public class Util {
             return null;
         }
 
+        /**
+         * decrypts the text given with private key
+         *
+         * @param cipherText text to decrypt
+         * @param encodedPrivateKey encoded private key
+         * @return decrypted text with private key
+         */
+
         public static String decrypt(String cipherText, byte[] encodedPrivateKey) {
             PrivateKey privateKey = RSA.generatePrivateKey(encodedPrivateKey);
             try {
@@ -183,6 +221,14 @@ public class Util {
             }
             return null;
         }
+
+        /**
+         * makes the sign of the text with private key
+         *
+         * @param plainText text to encrypt
+         * @param encodedPrivateKey encoded private key
+         * @return made sign with text and private key
+         */
 
         public static String sign(String plainText, byte[] encodedPrivateKey) {
             try {
@@ -197,10 +243,30 @@ public class Util {
             return null;
         }
 
+        /**
+         * verifies signature from text and public key
+         *
+         * @param plainText text to check
+         * @param signature signature to check
+         * @param encodedPublicKey public key to check
+         * @return true or false whether it is verified
+         */
+
         public static boolean verify(String plainText, String signature, byte[] encodedPublicKey) {
             PublicKey publicKey = RSA.generatePublicKey(encodedPublicKey);
             return RSA.verifySignature(plainText, signature, publicKey);
         }
+
+        /**
+         * Actual method for verify signature
+         *
+         * @see Util.RSA#verify(String, String, byte[])
+         *
+         * @param plainText text to verify
+         * @param signature signature to verify
+         * @param publicKey public key to verify
+         * @return
+         */
 
         private static boolean verifySignature(String plainText, String signature, PublicKey publicKey) {
             Signature sig;
