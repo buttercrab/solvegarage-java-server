@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import database.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class DeleteAccount implements HttpHandler {
      * This method is used for handling delete-account requests.
      * Using POST method, gets the id and password to logout
      * and calls the delete account function.
-     * {@link database.Database#deleteAccount(String, String)}
+     * {@link User#deleteAccount(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * and `key` property.

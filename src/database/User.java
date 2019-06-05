@@ -6,7 +6,7 @@ import util.Util;
 
 import java.sql.*;
 
-public class Database {
+public class User {
 
     private Connection conn = null;
     private Statement st = null;
@@ -112,7 +112,7 @@ public class Database {
     }
 
     /**
-     * Does similar thing with login function. {@link Database#login(String, String)}
+     * Does similar thing with login function. {@link User#login(String, String)}
      * It login with token instead of password. It has same response data format.
      * It would regenerate the token and send back the new token.
      * <p>

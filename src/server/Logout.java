@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import database.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class Logout implements HttpHandler {
      * This method is used for handling logout requests.
      * Using POST method, gets logout data from client
      * and checks the user database logout function.
-     * {@link database.Database#logout(String)}
+     * {@link User#logout(String)}
      * <p>
      * input is JSON object from client that has `id`,
      * and `key` property.

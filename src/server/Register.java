@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import database.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Register implements HttpHandler {
     /**
      * This method is used for handling login requests.
      * Using POST method, gets login data from client
-     * and makes new account. {@link database.Database#register(String, String)}
+     * and makes new account. {@link User#register(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * `pw`, and `key` property.

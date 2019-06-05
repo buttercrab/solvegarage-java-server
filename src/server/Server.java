@@ -1,7 +1,7 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
-import database.Database;
+import database.User;
 import util.Util;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 public class Server {
 
     private static int port = 3080;
-    static Database db = new Database();
+    static User db = new User();
     public static Thread cmd = new Commands();
     static HttpServer server;
 

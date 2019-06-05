@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import database.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class Login implements HttpHandler {
      * This method is used for handling login requests.
      * Using POST method, gets login data from client
      * and checks the user database login function.
-     * {@link database.Database#login(String, String)}
+     * {@link User#login(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * `pw`, and `key` property.
