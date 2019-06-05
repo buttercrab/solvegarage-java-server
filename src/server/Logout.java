@@ -13,6 +13,29 @@ import java.nio.charset.StandardCharsets;
 
 public class Logout implements HttpHandler {
 
+    /**
+     * This method is used for handling logout requests.
+     * Using POST method, gets login data from client
+     * and checks the user database logout function.
+     * {@link database.Database#logout(String)}
+     * <p>
+     * input is JSON object from client that has `id`,
+     * and `key` property.
+     * <ul>
+     * <li> `id` id to logout
+     * <li> `key` key to encrypt token when logout is success
+     * </ul>
+     * When the logout is success, it will send back
+     * JSON object that has `success`, `token` property
+     * <ul>
+     * <li> `success` true if logout succeeded
+     * <li> `code` failure code when logout failed
+     * </ul>
+     *
+     * @param exchange http exchange object
+     * @throws IOException from BufferedReader when input is not properly working.
+     */
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
