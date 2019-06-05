@@ -166,8 +166,12 @@ public class Database {
         try {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
-                this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
-                return "{'success':true}";
+                rs.getString("tk");
+                if (!rs.wasNull()) {
+                    this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
+                    return "{'success':true}";
+                }
+                return "{'success':false,'code':2}";
             }
             return "{'success':false,'code':1}";
         } catch (SQLException e) {

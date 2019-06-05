@@ -29,6 +29,7 @@ public class Server {
 
         Server.server.createContext("/login", new Login());
         Server.server.createContext("/register", new Register());
+        Server.server.createContext("/logout", new Logout());
 
         Server.server.start();
 
