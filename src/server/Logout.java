@@ -15,7 +15,7 @@ public class Logout implements HttpHandler {
 
     /**
      * This method is used for handling logout requests.
-     * Using POST method, gets login data from client
+     * Using POST method, gets logout data from client
      * and checks the user database logout function.
      * {@link database.Database#logout(String)}
      * <p>
@@ -26,7 +26,7 @@ public class Logout implements HttpHandler {
      * <li> `key` key to encrypt token when logout is success
      * </ul>
      * When the logout is success, it will send back
-     * JSON object that has `success`, `token` property
+     * JSON object that has `success` property
      * <ul>
      * <li> `success` true if logout succeeded
      * <li> `code` failure code when logout failed
