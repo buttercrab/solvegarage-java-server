@@ -46,7 +46,7 @@ public class Logout implements HttpHandler {
 
         String id = root.get("id").getAsString();
 
-        String res = Server.db.logout(id);
+        String res = Server.user.logout(id);
 
         exchange.sendResponseHeaders(200, res.length());
         OutputStream os = exchange.getResponseBody();

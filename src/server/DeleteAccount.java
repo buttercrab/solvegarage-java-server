@@ -47,7 +47,7 @@ public class DeleteAccount implements HttpHandler {
         String id = root.get("id").getAsString();
         String pw = root.get("pw").getAsString();
 
-        String res = Server.db.deleteAccount(id, pw);
+        String res = Server.user.deleteAccount(id, pw);
 
         exchange.sendResponseHeaders(200, res.length());
         OutputStream os = exchange.getResponseBody();

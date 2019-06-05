@@ -48,7 +48,7 @@ public class Register implements HttpHandler {
         String id = root.get("id").getAsString();
         String pw = root.get("pw").getAsString();
 
-        String res = Server.db.register(id, pw);
+        String res = Server.user.register(id, pw);
 
         exchange.sendResponseHeaders(200, res.length());
         OutputStream os = exchange.getResponseBody();

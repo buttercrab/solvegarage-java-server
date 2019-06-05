@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 public class Server {
 
     private static int port = 3080;
-    static User db = new User();
+    static User user = new User();
     public static Thread cmd = new Commands();
     static HttpServer server;
 
@@ -22,7 +22,7 @@ public class Server {
      */
 
     public static void main(String[] args) throws IOException {
-        Server.db.init(args[0], args[1]);
+        Server.user.init(args[0], args[1]);
         Server.cmd.start();
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);

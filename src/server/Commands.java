@@ -91,7 +91,7 @@ public class Commands extends Thread {
     public void quit() {
         this.finished = true;
         Server.server.stop(0);
-        Server.db.quit();
+        Server.user.quit();
         this.log("server", "Shutting down server...", Commands.LOG);
         System.exit(0);
     }

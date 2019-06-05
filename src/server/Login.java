@@ -51,10 +51,10 @@ public class Login implements HttpHandler {
 
         if (root.has("pw")) {
             String pw = root.get("pw").getAsString();
-            res = Server.db.login(id, pw);
+            res = Server.user.login(id, pw);
         } else {
             String tk = root.get("tk").getAsString();
-            res = Server.db.loginWithToken(id, tk);
+            res = Server.user.loginWithToken(id, tk);
         }
 
         exchange.sendResponseHeaders(200, res.length());
