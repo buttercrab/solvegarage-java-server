@@ -30,9 +30,13 @@ public class Commands extends Thread {
             if (next.length() > 0) {
                 switch (cmd[0]) {
                     case "help":
-                        this.log("note", "    exit", Commands.WARN);
+                        this.log("note", "Commands can be used", Commands.WARN);
+                        this.log("note", "> stop", Commands.WARN);
+                        this.log("note", " : stops the server", Commands.WARN);
+                        this.log("note", "> help", Commands.WARN);
+                        this.log("note", " : show this command help", Commands.WARN);
                         break;
-                    case "exit":
+                    case "stop":
                         this.quit();
                         break;
                     default:

@@ -11,13 +11,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class Login implements HttpHandler {
+public class Register implements HttpHandler {
 
     /**
      * This method is used for handling login requests.
      * Using POST method, gets login data from client
-     * and checks the user database login function.
-     * {@link database.Database#login(String, String)}
+     * and makes new account. {@link database.Database#register(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * `pw`, and `key` property.
@@ -29,7 +28,7 @@ public class Login implements HttpHandler {
      * When the login is success, it will send back
      * JSON object that has `success`, `token` property
      * <ul>
-     * <li> `success` true if login succeeded
+     * <li> `success` true if register succeeded
      * <li> `token` token to use for every logged-in action
      * <li> `code` failure code when login failed
      * </ul>
@@ -45,16 +44,10 @@ public class Login implements HttpHandler {
         JsonParser parser = new JsonParser();
         JsonObject root = parser.parse(br.readLine()).getAsJsonObject();
 
-        String res;
         String id = root.get("id").getAsString();
+        String pw = root.get("pw").getAsString();
 
-        if (root.has("pw")) {
-            String pw = root.get("pw").getAsString();
-            res = Server.db.login(id, pw);
-        } else {
-            String tk = root.get("tk").getAsString();
-            res = Server.db.loginWithToken(id, tk);
-        }
+        String res = Server.db.register(id, pw);
 
         exchange.sendResponseHeaders(200, res.length());
         OutputStream os = exchange.getResponseBody();

@@ -36,8 +36,40 @@ public class Database {
         }
     }
 
-    public synchronized void register(String id, String pw) {
+    /**
+     * Method to make new account. Gets the id and password and make new account
+     * if id had not been used. It generates token and save into database. It would
+     * return JSON with response data that has `success` field.
+     * <p>
+     * If `success` field is true, response data contains `token` field that has
+     * token value with it. If it is false, response data contains `code` field
+     * that has failure code with it.
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: Username is already used.
+     * </ul>
+     *
+     * @param id id to register
+     * @param pw password to register
+     * @return String with JSON format with response data.
+     */
 
+    public synchronized String register(String id, String pw) {
+        try {
+            ResultSet rs = this.st.executeQuery("SELECT id FROM user_data WHERE id='" + id + "'");
+            if (!rs.next()) {
+                String token = Util.generateToken(id);
+                this.st.executeUpdate("INSERT INTO user_data (id, pw, tk) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
+                return "{'success':true,'token':'" + token + "'}";
+            } else {
+                return "{'success':false,'code':1}";
+            }
+        } catch (SQLException e) {
+            Util.log("database", "Error on login with id: " + id, Commands.ERR);
+        }
+        return "{'success':false,'code':0}";
     }
 
     /**
@@ -52,7 +84,7 @@ public class Database {
      * Failure codes
      * <ul>
      * <li> 0: Server error. An error occurred when processing login.
-     * <li> 1: Username is not found.
+     * <li> 1: id is not found.
      * <li> 2: Password is incorrect.
      * </ul>
      *
@@ -77,7 +109,7 @@ public class Database {
                 return "{'success':false,'code':1}";
             }
         } catch (SQLException e) {
-            Util.log("database", "Error on login with id: " + id + ", pw: " + pw, Commands.ERR);
+            Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
         return "{'success':false,'code':0}";
     }
@@ -86,6 +118,13 @@ public class Database {
      * Does similar thing with login function. {@link Database#login(String, String)}
      * It login with token instead of password. It has same response data format.
      * It would regenerate the token and send back the new token.
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: id is not found.
+     * <li> 2: Token is not correct.
+     * </ul>
      *
      * @param id    id to login
      * @param token token to login
@@ -109,13 +148,25 @@ public class Database {
                 return "{'success':false,'code':1}";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
         return "{'success':false,'code':0}";
     }
 
-    public synchronized void logout(String id) {
+    /**
+     * It removes the token to validate from database.
+     * If the id was logged out before, it would do nothing.
+     * If the id is not found, it would do nothing.
+     *
+     * @param id id to logout
+     */
 
+    public synchronized void logout(String id) {
+        try {
+            this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
