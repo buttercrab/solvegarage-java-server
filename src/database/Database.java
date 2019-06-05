@@ -63,9 +63,8 @@ public class Database {
                 String token = Util.generateToken(id);
                 this.st.executeUpdate("INSERT INTO user_data (id, pw, tk) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
                 return "{'success':true,'token':'" + token + "'}";
-            } else {
-                return "{'success':false,'code':1}";
             }
+            return "{'success':false,'code':1}";
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
@@ -102,12 +101,10 @@ public class Database {
                     String token = Util.generateToken(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
                     return "{'success':true,'token':'" + token + "'}";
-                } else {
-                    return "{'success':false,'code':2}";
                 }
-            } else {
-                return "{'success':false,'code':1}";
+                return "{'success':false,'code':2}";
             }
+            return "{'success':false,'code':1}";
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
@@ -136,17 +133,14 @@ public class Database {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 String saved = rs.getString("tk");
-                if (!rs.wasNull()) {
-                    if (Util.validateToken(token, saved)) {
-                        token = Util.generateToken(id);
-                        this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
-                        return "{'success':true,'token':'" + token + "'}";
-                    }
+                if (!rs.wasNull() && Util.validateToken(token, saved)) {
+                    token = Util.generateToken(id);
+                    this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
+                    return "{'success':true,'token':'" + token + "'}";
                 }
                 return "{'success':false,'code':2}";
-            } else {
-                return "{'success':false,'code':1}";
             }
+            return "{'success':false,'code':1}";
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
@@ -155,18 +149,31 @@ public class Database {
 
     /**
      * It removes the token to validate from database.
-     * If the id was logged out before, it would do nothing.
-     * If the id is not found, it would do nothing.
+     * it would send response data.
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: id is not found.
+     * <li> 2: Already logged out.
+     * </ul>
      *
      * @param id id to logout
+     * @return String with JSON format with response data.
      */
 
-    public synchronized void logout(String id) {
+    public synchronized String logout(String id) {
         try {
-            this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
+            if (rs.next()) {
+                this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
+                return "{'success':true}";
+            }
+            return "{'success':false,'code':1}";
         } catch (SQLException e) {
-            e.printStackTrace();
+            Util.log("database", "Error on logout with id: " + id, Commands.ERR);
         }
+        return "{'success':false,'code':0}";
     }
 
     /**
