@@ -76,6 +76,14 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <p>
      * It signs the data with server private key and encrypts the whole data.
      * Then encodes the string with base64.
+     * <p>
+     * <h1>Instructions to get txt from server</h1>
+     * <ol>
+     *     <li> Decode the text by base64
+     *     <li> Decrypt the decoded text with client's private key
+     *     <li> Then the text would be the format {text}:{signature}
+     *     <li> Then verify the signature with server's public key just in case
+     * </ol>
      *
      * @param exchange http exchange object
      * @param data     data to send
