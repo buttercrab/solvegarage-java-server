@@ -71,10 +71,10 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <p>
      * <h1>Instructions to get txt from server</h1>
      * <ol>
-     *     <li> Decode the text by base64
-     *     <li> Decrypt the decoded text with client's private key
-     *     <li> Then the text would be the format {text}:{signature}
-     *     <li> Then verify the signature with server's public key just in case
+     * <li> Decode the text by base64
+     * <li> Decrypt the decoded text with client's private key
+     * <li> Then the text would be the format {text}:{signature}
+     * <li> Then verify the signature with server's public key just in case
      * </ol>
      *
      * @param exchange http exchange object
@@ -89,7 +89,9 @@ public abstract class SecureHttpHandler implements HttpHandler {
         for (Byte b : key)
             keyPrimitive[i++] = b;
 
-        data += ":" + Util.RSA.sign(data, Server.keyPair.getPrivate().getEncoded());
+        String sign = Util.RSA.sign(data, Server.keyPair.getPrivate().getEncoded());
+        if (sign == null) return;
+        data = Base64.getEncoder().encodeToString(data.getBytes()) + ":" + Base64.getEncoder().encodeToString(sign.getBytes());
         data = Util.RSA.encrypt(data, keyPrimitive);
         if (data == null) return;
         data = Base64.getEncoder().encodeToString(data.getBytes());
