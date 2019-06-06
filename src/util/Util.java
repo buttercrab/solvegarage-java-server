@@ -108,15 +108,15 @@ public class Util {
         }
 
         /**
-         * Validating tokens when requested
+         * Verifying tokens when requested
          * check if it is same as saved and time passed
          *
-         * @param token token to validate
+         * @param token token to verify
          * @param saved token saved on server
          * @return true if it is validated token
          */
 
-        public static boolean validate(String token, String saved) {
+        public static boolean verify(String token, String saved) {
             String[] savedParts = saved.split(":");
             if (!token.equals(saved)) return false;
             long curTiem = System.currentTimeMillis();

@@ -134,7 +134,7 @@ public class User {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 String saved = rs.getString("tk");
-                if (!rs.wasNull() && Util.token.validate(token, saved)) {
+                if (!rs.wasNull() && Util.token.verify(token, saved)) {
                     token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
@@ -149,7 +149,7 @@ public class User {
     }
 
     /**
-     * It removes the token to validate from database.
+     * It removes the token to verify from database.
      * it would send response data.
      * <p>
      * Failure codes
