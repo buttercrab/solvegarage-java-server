@@ -33,11 +33,30 @@ public class Commands extends Thread {
                         this.log("note", "Commands can be used", Commands.WARN);
                         this.log("note", "> stop", Commands.WARN);
                         this.log("note", " : stops the server", Commands.WARN);
+                        this.log("note", "> debug {number}", Commands.WARN);
+                        this.log("note", " : change the debug level. Number should be between 1 to 2", Commands.WARN);
                         this.log("note", "> help", Commands.WARN);
                         this.log("note", " : show this command help", Commands.WARN);
                         break;
                     case "stop":
                         this.quit();
+                        break;
+                    case "debug":
+                        if (cmd.length < 2) {
+                            this.log("error", "debug has one argument", Commands.ERR);
+                            this.log("note", "type `help` to see commands", Commands.WARN);
+                            break;
+                        }
+                        if (cmd[1].equals("1")) {
+                            this.log("note", "debugLevel changed to 1", Commands.WARN);
+                            Server.debugLevel = 1;
+                        } else if (cmd[1].equals("2")) {
+                            this.log("note", "debugLevel changed to 2", Commands.WARN);
+                            Server.debugLevel = 2;
+                        } else {
+                            this.log("error", "argument has to be between 1 to 2", Commands.ERR);
+                            this.log("note", "type `help` to see commands", Commands.WARN);
+                        }
                         break;
                     default:
                         this.log("error", "No command named `" + cmd[0] + "`", Commands.ERR);
