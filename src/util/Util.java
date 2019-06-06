@@ -117,7 +117,7 @@ public class Util {
          */
 
         public static boolean verify(String token, String saved) {
-            String[] savedParts = saved.split(":");
+            String[] savedParts = saved.split("[:]");
             if (!token.equals(saved)) return false;
             long curTiem = System.currentTimeMillis();
             return Long.valueOf(savedParts[2]) <= curTiem && curTiem - Long.valueOf(savedParts[2]) < 24 * 60 * 60 * 1000;
@@ -278,7 +278,7 @@ public class Util {
                 sig.update(plainText.getBytes());
                 return sig.verify(Base64.getDecoder().decode(signature));
             } catch (Exception e) {
-                Util.log("rsa", "Error on verifying signiture", Commands.ERR);
+                Util.log("rsa", "Error on verifying signature", Commands.ERR);
             }
             return false;
         }
