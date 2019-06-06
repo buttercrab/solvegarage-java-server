@@ -1,18 +1,13 @@
 package server;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import database.User;
+import javafx.util.Pair;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
-public class Login implements HttpHandler {
+public class Login extends SecureHttpHandler {
 
     /**
      * This method is used for handling login requests.
@@ -41,33 +36,25 @@ public class Login implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if (exchange.getRequestMethod().equals("GET")) {
-            exchange.sendResponseHeaders(200, Server.publicKey.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(Server.publicKey.getBytes());
-            os.close();
-            return;
-        }
+        Pair<JsonObject, Byte[]> root = super.handleInit(exchange);
+        if (root == null) return;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
+        String id = root.getKey().get("id").getAsString();
 
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(br.readLine()).getAsJsonObject();
-
-        String res;
-        String id = root.get("id").getAsString();
-
-        if (root.has("pw")) {
-            String pw = root.get("pw").getAsString();
-            res = Server.user.login(id, pw);
+        Pair<Boolean, Object> t;
+        if (root.getKey().has("pw")) {
+            String pw = root.getKey().get("pw").getAsString();
+            t = Server.user.login(id, pw);
         } else {
-            String tk = root.get("tk").getAsString();
-            res = Server.user.loginWithToken(id, tk);
+            String tk = root.getKey().get("tk").getAsString();
+            t = Server.user.loginWithToken(id, tk);
         }
+        String res = "{'success':" + t.getKey() + "";
+        if (t.getKey())
+            res += ",'token':'" + t.getValue() + "'}";
+        else
+            res += ",'code':'" + t.getValue() + "'}";
 
-        exchange.sendResponseHeaders(200, res.length());
-        OutputStream os = exchange.getResponseBody();
-        os.write(res.getBytes());
-        os.close();
+        super.send(exchange, res, root.getValue());
     }
 }

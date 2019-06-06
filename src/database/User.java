@@ -1,5 +1,6 @@
 package database;
 
+import javafx.util.Pair;
 import server.Commands;
 import server.Server;
 import util.Util;
@@ -39,11 +40,11 @@ public class User {
     /**
      * Method to make new account. Gets the id and password and make new account
      * if id had not been used. It generates token and save into database. It would
-     * return JSON with response data that has `success` field.
+     * return JSON with response data.
      * <p>
-     * If `success` field is true, response data contains `token` field that has
-     * token value with it. If it is false, response data contains `code` field
-     * that has failure code with it.
+     * If register succeeded, key is true and value is String which contains the
+     * token. If register is not successful, key is false, value is Integer which
+     * contains the failure code.
      * <p>
      * Failure codes
      * <ul>
@@ -53,32 +54,32 @@ public class User {
      *
      * @param id id to register
      * @param pw password to register
-     * @return String with JSON format with response data.
+     * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized String register(String id, String pw) {
+    public synchronized Pair<Boolean, Object> register(String id, String pw) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT id FROM user_data WHERE id='" + id + "'");
             if (!rs.next()) {
                 String token = Util.token.generate(id);
                 this.st.executeUpdate("INSERT INTO user_data (id, pw, tk) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
-                return "{'success':true,'token':'" + token + "'}";
+                return new Pair<>(true, token);
             }
-            return "{'success':false,'code':1}";
+            return new Pair<>(false, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
-        return "{'success':false,'code':0}";
+        return new Pair<>(false, 0);
     }
 
     /**
      * Method to login to server. Gets the id and password and verify by database.
      * When login succeeded, it generates token and save into database. It would
-     * return JSON with response data that has `success` field.
+     * return JSON with response data.
      * <p>
-     * If `success` field is true, response data contains `token` field that has
-     * token value with it. If it is false, response data contains `code` field
-     * that has failure code with it.
+     * If login succeeded, key is true and value is String which contains the
+     * token. If login is not successful, key is false, value is Integer which
+     * contains the failure code.
      * <p>
      * Failure codes
      * <ul>
@@ -89,10 +90,10 @@ public class User {
      *
      * @param id id to login
      * @param pw password to login
-     * @return String with JSON format with response data.
+     * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized String login(String id, String pw) {
+    public synchronized Pair<Boolean, Object> login(String id, String pw) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
@@ -100,15 +101,15 @@ public class User {
                 if (_pw.equals(pw)) {
                     String token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
-                    return "{'success':true,'token':'" + token + "'}";
+                    return new Pair<>(true, token);
                 }
-                return "{'success':false,'code':2}";
+                return new Pair<>(false, 2);
             }
-            return "{'success':false,'code':1}";
+            return new Pair<>(false, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
-        return "{'success':false,'code':0}";
+        return new Pair<>(false, 0);
     }
 
     /**
@@ -125,10 +126,10 @@ public class User {
      *
      * @param id    id to login
      * @param token token to login
-     * @return String with JSON format with response data.
+     * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized String loginWithToken(String id, String token) {
+    public synchronized Pair<Boolean, Object> loginWithToken(String id, String token) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
@@ -136,15 +137,15 @@ public class User {
                 if (!rs.wasNull() && Util.token.validate(token, saved)) {
                     token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
-                    return "{'success':true,'token':'" + token + "'}";
+                    return new Pair<>(true, token);
                 }
-                return "{'success':false,'code':2}";
+                return new Pair<>(true, 2);
             }
-            return "{'success':false,'code':1}";
+            return new Pair<>(true, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
-        return "{'success':false,'code':0}";
+        return new Pair<>(true, 0);
     }
 
     /**
@@ -159,25 +160,25 @@ public class User {
      * </ul>
      *
      * @param id id to logout
-     * @return String with JSON format with response data.
+     * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized String logout(String id) {
+    public synchronized Pair<Boolean, Integer> logout(String id) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 rs.getString("tk");
                 if (!rs.wasNull()) {
                     this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
-                    return "{'success':true}";
+                    return new Pair<>(true, -1);
                 }
-                return "{'success':false,'code':2}";
+                return new Pair<>(true, 2);
             }
-            return "{'success':false,'code':1}";
+            return new Pair<>(true, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on logout with id: " + id, Commands.ERR);
         }
-        return "{'success':false,'code':0}";
+        return new Pair<>(true, 0);
     }
 
     /**
@@ -193,25 +194,25 @@ public class User {
      *
      * @param id id to delete account
      * @param pw password to the account
-     * @return String with JSON format with response data.
+     * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized String deleteAccount(String id, String pw) {
+    public synchronized Pair<Boolean, Integer> deleteAccount(String id, String pw) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
             if (rs.next()) {
                 String p = rs.getString("pw");
                 if (p.equals(pw)) {
                     this.st.executeUpdate("DELETE FROM user_data WHERE id='" + id + "'");
-                    return "{'success':true}";
+                    return new Pair<>(true, -1);
                 }
-                return "{'success':false,'code':2}";
+                return new Pair<>(true, 2);
             }
-            return "{'success':false,'code':1}";
+            return new Pair<>(true, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on deleting an account: " + id, Commands.ERR);
         }
-        return "{'success':false,'code':0}";
+        return new Pair<>(true, 0);
     }
 
     /**

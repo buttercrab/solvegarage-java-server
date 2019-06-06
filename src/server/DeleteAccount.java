@@ -1,18 +1,13 @@
 package server;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import database.User;
+import javafx.util.Pair;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
-public class DeleteAccount implements HttpHandler {
+public class DeleteAccount extends SecureHttpHandler {
 
     /**
      * This method is used for handling delete-account requests.
@@ -39,27 +34,18 @@ public class DeleteAccount implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        if (exchange.getRequestMethod().equals("GET")) {
-            exchange.sendResponseHeaders(200, Server.publicKey.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(Server.publicKey.getBytes());
-            os.close();
-            return;
-        }
+        Pair<JsonObject, Byte[]> root = super.handleInit(exchange);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
+        String id = root.getKey().get("id").getAsString();
+        String pw = root.getKey().get("pw").getAsString();
 
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(br.readLine()).getAsJsonObject();
+        Pair<Boolean, Integer> t = Server.user.deleteAccount(id, pw);
+        String res = "{'success':" + t.getKey() + ",";
+        if (t.getValue() != -1)
+            res += "'code':" + t.getValue() + "}";
+        else
+            res += "}";
 
-        String id = root.get("id").getAsString();
-        String pw = root.get("pw").getAsString();
-
-        String res = Server.user.deleteAccount(id, pw);
-
-        exchange.sendResponseHeaders(200, res.length());
-        OutputStream os = exchange.getResponseBody();
-        os.write(res.getBytes());
-        os.close();
+        super.send(exchange, res, root.getValue());
     }
 }
