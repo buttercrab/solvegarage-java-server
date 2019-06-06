@@ -35,6 +35,7 @@ public class Server {
         Server.server.createContext("/register", new Register());
         Server.server.createContext("/logout", new Logout());
         Server.server.createContext("/delete-account", new DeleteAccount());
+        Server.server.createContext("/search", new Search());
 
         Server.server.start();
 
