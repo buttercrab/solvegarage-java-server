@@ -9,6 +9,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 
 public class Util {
@@ -159,7 +160,7 @@ public class Util {
 
         private static PublicKey generatePublicKey(byte[] encodedPublicKey) {
             try {
-                return KeyFactory.getInstance("RSA").generatePublic(new PKCS8EncodedKeySpec(encodedPublicKey));
+                return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(encodedPublicKey));
             } catch (Exception e) {
                 Util.log("rsa", "Error on generating public key", Commands.ERR);
             }
