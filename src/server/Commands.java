@@ -23,7 +23,7 @@ public class Commands extends Thread {
     @Override
     public void run() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("> ");
+        System.out.print("\r> ");
         while (!this.finished) {
             String next = sc.nextLine();
             String[] cmd = next.split(" ");
@@ -44,7 +44,7 @@ public class Commands extends Thread {
                         this.log("note", "type `help` to see commands", Commands.WARN);
                 }
             } else {
-                System.out.print("> ");
+                System.out.print("\r> ");
             }
         }
     }
