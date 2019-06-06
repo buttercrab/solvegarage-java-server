@@ -14,3 +14,7 @@ lib
 # ds store
 
 .DS_Store
+
+# document
+
+doc

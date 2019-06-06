@@ -27,6 +27,8 @@ public class Util {
      * </pre>
      *
      * @param query gets the query string
+     * @param parameters parameters map to contain
+     * @throws UnsupportedEncodingException when it cannot be encoded
      */
 
     public static void parseQuery(String query, Map<String, Object> parameters) throws UnsupportedEncodingException {
@@ -265,7 +267,7 @@ public class Util {
          * @param plainText text to verify
          * @param signature signature to verify
          * @param publicKey public key to verify
-         * @return
+         * @return true if it is verified
          */
 
         private static boolean verifySignature(String plainText, String signature, PublicKey publicKey) {

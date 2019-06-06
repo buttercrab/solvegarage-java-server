@@ -15,11 +15,33 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 
+/**
+ * This abstract class is to make secure connection.
+ */
+
 public abstract class SecureHttpHandler implements HttpHandler {
     @Override
     public abstract void handle(HttpExchange exchange) throws IOException;
 
-    protected Pair<JsonObject, Byte[]> handleInit(HttpExchange exchange) throws IOException {
+    /**
+     * Gets the input from http connection and encrypts the data.
+     * <p>
+     * <h1>Instructions to make txt to send</h1>
+     * <ol>
+     * <li> Stringify the JSON file to send
+     * <li> Encode the json string by base64
+     * <li> Make RSA key pair
+     * <li> Make string with format {public key}:{encoded text}:{signature}
+     * <li> Encrypt the string above with public key gotten from server
+     * <li> Encode the string bt base64
+     * </ol>
+     *
+     * @param exchange exchange object for connection
+     * @return Pair of json and public key gotten
+     * @throws IOException when something goes wrong
+     */
+
+    Pair<JsonObject, Byte[]> handleInit(HttpExchange exchange) throws IOException {
         if (exchange.getRequestMethod().equals("GET")) {
             exchange.sendResponseHeaders(200, Server.publicKey.length());
             OutputStream os = exchange.getResponseBody();
@@ -49,7 +71,19 @@ public abstract class SecureHttpHandler implements HttpHandler {
         return new Pair<>(parser.parse(text).getAsJsonObject(), keyObject);
     }
 
-    protected void send(HttpExchange exchange, String data, Byte[] key) throws IOException {
+    /**
+     * Sends the data with encryption from public key
+     * <p>
+     * It signs the data with server private key and encrypts the whole data.
+     * Then encodes the string with base64.
+     *
+     * @param exchange http exchange object
+     * @param data     data to send
+     * @param key      key to encrypt
+     * @throws IOException when something goes wrong
+     */
+
+    void send(HttpExchange exchange, String data, Byte[] key) throws IOException {
         byte[] keyPrimitive = new byte[key.length];
         int i = 0;
         for (Byte b : key)
@@ -57,8 +91,8 @@ public abstract class SecureHttpHandler implements HttpHandler {
 
         data += ":" + Util.RSA.sign(data, Server.keyPair.getPrivate().getEncoded());
         data = Util.RSA.encrypt(data, keyPrimitive);
-
         if (data == null) return;
+        data = Base64.getEncoder().encodeToString(data.getBytes());
 
         exchange.sendResponseHeaders(200, data.length());
         OutputStream os = exchange.getResponseBody();
