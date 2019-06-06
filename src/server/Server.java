@@ -19,6 +19,13 @@ public class Server {
     static String publicKey;
 
     /**
+     * 1: release level (no log printed)
+     * 2: debug level (some log printed)
+     */
+
+    public static int debugLevel = 1;
+
+    /**
      * Main function of this server. It starts the server and connect to MySQL database.
      *
      * @param args arguments when stating the server
@@ -31,7 +38,7 @@ public class Server {
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        Server.server.createContext("/getkey", new GetKeyHandler());
+        Server.server.createContext("/get-key", new GetKeyHandler());
         Server.server.createContext("/login", new LoginHandler());
         Server.server.createContext("/register", new RegisterHandler());
         Server.server.createContext("/logout", new LogoutHandler());

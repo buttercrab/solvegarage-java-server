@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import database.User;
 import javafx.util.Pair;
+import util.Util;
 
 import java.io.IOException;
 
@@ -54,6 +55,10 @@ public class LoginHandler extends SecureHttpHandler {
             res += ",'token':'" + t.getValue() + "'}";
         else
             res += ",'code':'" + t.getValue() + "'}";
+
+        if (Server.debugLevel >= 2) {
+            Util.log("server", "/login POST 200 id='" + id + "'", Commands.LOG);
+        }
 
         super.send(exchange, res, root.getValue());
     }
