@@ -31,9 +31,9 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <li> Stringify the JSON file to send
      * <li> Encode the json string by base64
      * <li> Make RSA key pair
-     * <li> Make string with format {public key}:{encoded text}:{signature}
+     * <li> Make string with format {public key(encoded base64)}:{encoded text}:{signature(encoded base64)}
      * <li> Encrypt the string above with public key gotten from server
-     * <li> Encode the string bt base64
+     * <li> Encode the string by base64
      * </ol>
      *
      * @param exchange exchange object for connection
