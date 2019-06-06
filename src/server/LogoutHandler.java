@@ -7,7 +7,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 
-public class Logout extends SecureHttpHandler {
+public class LogoutHandler extends SecureHttpHandler {
 
     /**
      * This method is used for handling logout requests.

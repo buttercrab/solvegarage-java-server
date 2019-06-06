@@ -7,7 +7,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 
-public class Register extends SecureHttpHandler {
+public class RegisterHandler extends SecureHttpHandler {
 
     /**
      * This method is used for handling login requests.

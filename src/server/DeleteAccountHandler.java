@@ -7,7 +7,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 
-public class DeleteAccount extends SecureHttpHandler {
+public class DeleteAccountHandler extends SecureHttpHandler {
 
     /**
      * This method is used for handling delete-account requests.

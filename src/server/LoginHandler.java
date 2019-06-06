@@ -7,7 +7,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 
-public class Login extends SecureHttpHandler {
+public class LoginHandler extends SecureHttpHandler {
 
     /**
      * This method is used for handling login requests.

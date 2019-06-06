@@ -31,12 +31,12 @@ public class Server {
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        Server.server.createContext("/getkey", new GetKey());
-        Server.server.createContext("/login", new Login());
-        Server.server.createContext("/register", new Register());
-        Server.server.createContext("/logout", new Logout());
-        Server.server.createContext("/delete-account", new DeleteAccount());
-        Server.server.createContext("/search", new Search());
+        Server.server.createContext("/getkey", new GetKeyHandler());
+        Server.server.createContext("/login", new LoginHandler());
+        Server.server.createContext("/register", new RegisterHandler());
+        Server.server.createContext("/logout", new LogoutHandler());
+        Server.server.createContext("/delete-account", new DeleteAccountHandler());
+        Server.server.createContext("/search", new SearchHandler());
 
         Server.server.start();
 
