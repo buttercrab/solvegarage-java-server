@@ -31,6 +31,7 @@ public class Server {
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);
 
+        Server.server.createContext("/getkey", new GetKey());
         Server.server.createContext("/login", new Login());
         Server.server.createContext("/register", new Register());
         Server.server.createContext("/logout", new Logout());

@@ -42,14 +42,6 @@ public abstract class SecureHttpHandler implements HttpHandler {
      */
 
     Pair<JsonObject, Byte[]> handleInit(HttpExchange exchange) throws IOException {
-        if (exchange.getRequestMethod().equals("GET")) {
-            exchange.sendResponseHeaders(200, Server.publicKey.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(Server.publicKey.getBytes());
-            os.close();
-            return null;
-        }
-
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
 
         String input = Util.RSA.decrypt(Arrays.toString(Base64.getDecoder().decode(br.readLine())), Server.keyPair.getPrivate().getEncoded());
