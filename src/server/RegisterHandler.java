@@ -41,7 +41,7 @@ public class RegisterHandler extends SecureHttpHandler {
         String id = root.getKey().get("id").getAsString();
         String pw = root.getKey().get("pw").getAsString();
 
-        Pair<Boolean, Object> t = Server.user.login(id, pw);
+        Pair<Boolean, Object> t = Server.user.register(id, pw);
         String res = "{'success':" + t.getKey() + "";
         if (t.getKey())
             res += ",'token':'" + t.getValue() + "'}";

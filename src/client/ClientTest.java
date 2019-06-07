@@ -18,7 +18,7 @@ public class ClientTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         byte[] serverPublicKey = Base64.getDecoder().decode(br.readLine());
 
-        JsonObject root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/login", "{'id':'admin','pw':'abcd1234'}", serverPublicKey, Util.RSA.generateKeyPair());
+        JsonObject root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/register", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
         System.out.println(root.toString());
     }
 }

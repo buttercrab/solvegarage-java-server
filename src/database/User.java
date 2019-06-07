@@ -67,7 +67,7 @@ public class User {
             }
             return new Pair<>(false, 1);
         } catch (SQLException e) {
-            Util.log("database", "Error on login with id: " + id, Commands.ERR);
+            Util.log("database", "Error on register with id: " + id, Commands.ERR);
         }
         return new Pair<>(false, 0);
     }
@@ -119,7 +119,7 @@ public class User {
      * <p>
      * Failure codes
      * <ul>
-     * <li> 0: Server error. An error occurred when processing login.
+     * * <li> 0: Server error. An error occurred when processing login.
      * <li> 1: id is not found.
      * <li> 2: Token is not correct.
      * </ul>
