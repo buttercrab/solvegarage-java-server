@@ -15,7 +15,7 @@ when login was a success
 1. `{'success':false,'code':ERR_CODE}`
 when login was failed
 
-login fail code:
+fail code:
 
 0: Server Error
 1: Username used
@@ -33,7 +33,7 @@ when login was a success
 1. `{'success':false,'code':ERR_CODE}`
 when login was failed
 
-login fail code:
+fail code:
 
 0: Server Error
 1: Username not found
@@ -52,7 +52,7 @@ when login was a success
 1. `{'success':false,'code':ERR_CODE}`
 when login was failed
 
-login fail code:
+fail code:
 
 0: Server Error
 1: Username not found
@@ -71,8 +71,46 @@ when login was a success
 1. `{'success':false,'code':ERR_CODE}`
 when login was failed
 
-login fail code:
+fail code:
 
 0: Server Error
 1: Username not found
 2: Password incorrect
+
+- ## `http://url:port/profile-image` GET
+
+Gets the image of profile image.
+
+1. `?id=ID_TO_GET`
+(id should be encoded)
+
+Then response would be like this.
+
+1. `{'success':true,'img':'IMG_DATA'}`
+when login was a success
+1. `{'success':false,'code':ERR_CODE}`
+when login was failed
+
+fail code:
+
+0: Server Error
+1: Username not found
+
+- ## `http://url:port/profile-image` POST
+
+Posts the image of profile image.
+
+1. `{'id':'test','tk':TOKEN_FOR_TEST}`
+
+Then response would be like this.
+
+1. `{'success':true}`
+when login was a success
+1. `{'success':false,'code':ERR_CODE}`
+when login was failed
+
+fail code:
+
+0: Server Error
+1: Username not found
+2: Token is not incorrect
