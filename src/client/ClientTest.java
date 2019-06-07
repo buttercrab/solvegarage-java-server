@@ -1,6 +1,7 @@
 package client;
 
 import com.google.gson.JsonObject;
+import server.Commands;
 import util.Util;
 
 import java.io.BufferedReader;
@@ -18,7 +19,22 @@ public class ClientTest {
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         byte[] serverPublicKey = Base64.getDecoder().decode(br.readLine());
 
-        JsonObject root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/register", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
-        System.out.println(root.toString());
+        JsonObject root;
+
+        root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/delete-account", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
+        Util.log("delete-account", root.toString(), Commands.LOG);
+
+        root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/register", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
+        Util.log("register", root.toString(), Commands.LOG);
+
+        root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/login", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
+        Util.log("login", root.toString(), Commands.LOG);
+        String token = root.get("token").getAsString();
+
+        root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/login", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Util.RSA.generateKeyPair());
+        Util.log("login-as-token", root.toString(), Commands.LOG);
+
+        root = SecureHttpConnection.post("http://buttercrab.iptime.org:3080/logout", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
+        Util.log("logout", root.toString(), Commands.LOG);
     }
 }

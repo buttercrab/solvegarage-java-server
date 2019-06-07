@@ -139,13 +139,13 @@ public class User {
                     this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
                 }
-                return new Pair<>(true, 2);
+                return new Pair<>(false, 2);
             }
-            return new Pair<>(true, 1);
+            return new Pair<>(false, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on login with id: " + id, Commands.ERR);
         }
-        return new Pair<>(true, 0);
+        return new Pair<>(false, 0);
     }
 
     /**
@@ -172,13 +172,13 @@ public class User {
                     this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
-                return new Pair<>(true, 2);
+                return new Pair<>(false, 2);
             }
-            return new Pair<>(true, 1);
+            return new Pair<>(false, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on logout with id: " + id, Commands.ERR);
         }
-        return new Pair<>(true, 0);
+        return new Pair<>(false, 0);
     }
 
     /**
@@ -206,13 +206,13 @@ public class User {
                     this.st.executeUpdate("DELETE FROM user_data WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
-                return new Pair<>(true, 2);
+                return new Pair<>(false, 2);
             }
-            return new Pair<>(true, 1);
+            return new Pair<>(false, 1);
         } catch (SQLException e) {
             Util.log("database", "Error on deleting an account: " + id, Commands.ERR);
         }
-        return new Pair<>(true, 0);
+        return new Pair<>(false, 0);
     }
 
     /**
