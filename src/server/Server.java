@@ -23,7 +23,7 @@ public class Server {
      * 2: debug level (some log printed)
      */
 
-    public static int debugLevel = 1;
+    static int debugLevel = 1;
 
     /**
      * Main function of this server. It starts the server and connect to MySQL database.

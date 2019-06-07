@@ -149,6 +149,7 @@ public class Util {
                 return generator.generateKeyPair();
             } catch (NoSuchAlgorithmException e) {
                 Util.log("rsa", "No algorithm named `RSA`", Commands.ERR);
+                Util.log("note", "You should restart the server", Commands.WARN);
             }
             return null;
         }
