@@ -33,8 +33,9 @@ public class ClientTest {
 
         root = SecureHttpConnection.post("http://localhost:3080/login", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Util.RSA.generateKeyPair());
         Util.log("login-as-token", root.toString(), Commands.LOG);
+        token = root.get("token").getAsString();
 
-        root = SecureHttpConnection.post("http://localhost:3080/logout", "{'id':'test','pw':'test'}", serverPublicKey, Util.RSA.generateKeyPair());
+        root = SecureHttpConnection.post("http://localhost:3080/logout", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Util.RSA.generateKeyPair());
         Util.log("logout", root.toString(), Commands.LOG);
     }
 }

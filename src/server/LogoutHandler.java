@@ -16,12 +16,13 @@ public class LogoutHandler extends SecureHttpHandler {
      * This method is used for handling logout requests.
      * Using POST method, gets logout data from client
      * and checks the user database logout function.
-     * {@link User#logout(String)}
+     * {@link User#logout(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
      * and `key` property.
      * <ul>
      * <li> `id` id to logout
+     * <li> `tk` token to logout
      * <li> `key` key to encrypt token when logout is success
      * </ul>
      * When the logout is success, it will send back
@@ -41,8 +42,9 @@ public class LogoutHandler extends SecureHttpHandler {
         if (root == null) return;
 
         String id = root.getKey().get("id").getAsString();
+        String tk = root.getKey().get("tk").getAsString();
 
-        Pair<Boolean, Integer> t = Server.user.logout(id);
+        Pair<Boolean, Integer> t = Server.user.logout(id, tk);
         String res = "{'success':" + t.getKey();
         if (t.getKey())
             res += "}";

@@ -59,10 +59,10 @@ public class User {
 
     public synchronized Pair<Boolean, Object> register(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT id FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
             if (!rs.next()) {
                 String token = Util.token.generate(id);
-                this.st.executeUpdate("INSERT INTO user_data (id, pw, tk) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
+                this.st.executeUpdate("INSERT INTO user (id, pw, token) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
                 return new Pair<>(true, token);
             }
             return new Pair<>(false, 1);
@@ -95,12 +95,12 @@ public class User {
 
     public synchronized Pair<Boolean, Object> login(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String _pw = rs.getString("pw");
                 if (_pw.equals(pw)) {
                     String token = Util.token.generate(id);
-                    this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
+                    this.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
                 }
                 return new Pair<>(false, 2);
@@ -131,12 +131,12 @@ public class User {
 
     public synchronized Pair<Boolean, Object> loginWithToken(String id, String token) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String saved = rs.getString("tk");
                 if (!rs.wasNull() && Util.token.verify(token, saved)) {
                     token = Util.token.generate(id);
-                    this.st.executeUpdate("UPDATE user_data SET tk='" + token + "' WHERE id='" + id + "'");
+                    this.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
                 }
                 return new Pair<>(false, 2);
@@ -163,13 +163,12 @@ public class User {
      * @return Pair with if register succeeded and code or token
      */
 
-    public synchronized Pair<Boolean, Integer> logout(String id) {
+    public synchronized Pair<Boolean, Integer> logout(String id, String tk) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT tk FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
-                rs.getString("tk");
-                if (!rs.wasNull()) {
-                    this.st.executeUpdate("UPDATE user_data SET tk=NULL WHERE id='" + id + "'");
+                if (tk.equals(rs.getString("tk")) && !rs.wasNull()) {
+                    this.st.executeUpdate("UPDATE user SET token=NULL WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
                 return new Pair<>(false, 2);
@@ -199,11 +198,11 @@ public class User {
 
     public synchronized Pair<Boolean, Integer> deleteAccount(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT pw FROM user_data WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String p = rs.getString("pw");
                 if (p.equals(pw)) {
-                    this.st.executeUpdate("DELETE FROM user_data WHERE id='" + id + "'");
+                    this.st.executeUpdate("DELETE FROM user WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
                 return new Pair<>(false, 2);
