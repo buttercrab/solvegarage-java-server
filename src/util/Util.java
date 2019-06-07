@@ -27,7 +27,7 @@ public class Util {
      *     }
      * </pre>
      *
-     * @param query gets the query string
+     * @param query      gets the query string
      * @param parameters parameters map to contain
      * @throws UnsupportedEncodingException when it cannot be encoded
      */
@@ -207,7 +207,7 @@ public class Util {
         /**
          * decrypts the text given with private key
          *
-         * @param cipherText text to decrypt
+         * @param cipherText        text to decrypt
          * @param encodedPrivateKey encoded private key
          * @return decrypted text with private key
          */
@@ -228,7 +228,7 @@ public class Util {
         /**
          * makes the sign of the text with private key
          *
-         * @param plainText text to encrypt
+         * @param plainText         text to encrypt
          * @param encodedPrivateKey encoded private key
          * @return made sign with text and private key
          */
@@ -249,8 +249,8 @@ public class Util {
         /**
          * verifies signature from text and public key
          *
-         * @param plainText text to check
-         * @param signature signature to check
+         * @param plainText        text to check
+         * @param signature        signature to check
          * @param encodedPublicKey public key to check
          * @return true or false whether it is verified
          */
@@ -263,12 +263,11 @@ public class Util {
         /**
          * Actual method for verify signature
          *
-         * @see Util.RSA#verify(String, String, byte[])
-         *
          * @param plainText text to verify
          * @param signature signature to verify
          * @param publicKey public key to verify
          * @return true if it is verified
+         * @see Util.RSA#verify(String, String, byte[])
          */
 
         private static boolean verifySignature(String plainText, String signature, PublicKey publicKey) {

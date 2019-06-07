@@ -31,9 +31,8 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <li> Stringify the JSON file to send
      * <li> Encode the json string by base64
      * <li> Make RSA key pair
-     * <li> Make string with format {public key(encoded base64)}:{encoded text}:{signature(encoded base64)}
+     * <li> Make string with format {public key(encoded base64)}:{text(encoded base64)}:{signature}
      * <li> Encrypt the string above with public key gotten from server
-     * <li> Encode the string by base64
      * </ol>
      *
      * @param exchange exchange object for connection
@@ -44,13 +43,13 @@ public abstract class SecureHttpHandler implements HttpHandler {
     Pair<JsonObject, Byte[]> handleInit(HttpExchange exchange) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
 
-        String input = Util.RSA.decrypt(Arrays.toString(Base64.getDecoder().decode(br.readLine())), Server.keyPair.getPrivate().getEncoded());
+        String input = Util.RSA.decrypt(br.readLine(), Server.keyPair.getPrivate().getEncoded());
         if (input == null) return null;
 
         String[] body = input.split("[:]");
         byte[] key = Base64.getDecoder().decode(body[0]);
         String text = Arrays.toString(Base64.getDecoder().decode(body[1]));
-        String sign = Arrays.toString(Base64.getDecoder().decode(body[2]));
+        String sign = body[2];
 
         if (!Util.RSA.verify(text, sign, key)) return null;
 
@@ -71,7 +70,6 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <p>
      * <h1>Instructions to get txt from server</h1>
      * <ol>
-     * <li> Decode the text by base64
      * <li> Decrypt the decoded text with client's private key
      * <li> Then the text would be the format {text}:{signature}
      * <li> Then verify the signature with server's public key just in case
@@ -94,7 +92,6 @@ public abstract class SecureHttpHandler implements HttpHandler {
         data = Base64.getEncoder().encodeToString(data.getBytes()) + ":" + Base64.getEncoder().encodeToString(sign.getBytes());
         data = Util.RSA.encrypt(data, keyPrimitive);
         if (data == null) return;
-        data = Base64.getEncoder().encodeToString(data.getBytes());
 
         exchange.sendResponseHeaders(200, data.length());
         OutputStream os = exchange.getResponseBody();
