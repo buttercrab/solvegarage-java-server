@@ -101,9 +101,9 @@ public abstract class SecureHttpHandler implements HttpHandler {
         data = Base64.getEncoder().encodeToString(data.getBytes()) + ":" + sign;
         byte[] aesKey = Util.AES.generateKey();
         data = Util.AES.encrypt(data, aesKey);
-        String encrypedKey = Util.RSA.encrypt(new String(aesKey), keyPrimitive);
-        if (encrypedKey == null) return;
-        data = encrypedKey + ":" + data;
+        String encryptedKey = Util.RSA.encrypt(new String(aesKey), keyPrimitive);
+        if (encryptedKey == null) return;
+        data = encryptedKey + ":" + data;
 
         exchange.sendResponseHeaders(200, data.length());
         OutputStream os = exchange.getResponseBody();
