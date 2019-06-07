@@ -41,7 +41,7 @@ public class LogoutHandler extends SecureHttpHandler {
         String id = root.getKey().get("id").getAsString();
 
         Pair<Boolean, Integer> t = Server.user.logout(id);
-        String res = "{'success':" + t.getKey() + "";
+        String res = "{'success':" + t.getKey();
         if (t.getKey())
             res += "}";
         else

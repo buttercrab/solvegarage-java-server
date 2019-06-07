@@ -41,9 +41,9 @@ public class DeleteAccountHandler extends SecureHttpHandler {
         String pw = root.getKey().get("pw").getAsString();
 
         Pair<Boolean, Integer> t = Server.user.deleteAccount(id, pw);
-        String res = "{'success':" + t.getKey() + ",";
+        String res = "{'success':" + t.getKey();
         if (t.getValue() != -1)
-            res += "'code':" + t.getValue() + "}";
+            res += ",'code':" + t.getValue() + "}";
         else
             res += "}";
 
