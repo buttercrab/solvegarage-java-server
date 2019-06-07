@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 
 /**
@@ -44,6 +43,7 @@ public abstract class SecureHttpHandler implements HttpHandler {
         BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
 
         String[] input = br.readLine().split("[:]");
+        br.close();
         String aesKey = Util.RSA.decrypt(input[0], Server.keyPair.getPrivate().getEncoded());
         if (aesKey == null) return null;
         String body = Util.AES.decrypt(input[1], aesKey.getBytes());
@@ -51,7 +51,7 @@ public abstract class SecureHttpHandler implements HttpHandler {
 
         String[] content = body.split("[:]");
         byte[] key = Base64.getDecoder().decode(content[0]);
-        String text = Arrays.toString(Base64.getDecoder().decode(content[1]));
+        String text = new String(Base64.getDecoder().decode(content[1]));
         String sign = content[2];
 
         if (!Util.RSA.verify(text, sign, key)) return null;
@@ -92,7 +92,7 @@ public abstract class SecureHttpHandler implements HttpHandler {
 
         String sign = Util.RSA.sign(data, Server.keyPair.getPrivate().getEncoded());
         if (sign == null) return;
-        data = Base64.getEncoder().encodeToString(data.getBytes()) + ":" + Base64.getEncoder().encodeToString(sign.getBytes());
+        data = Base64.getEncoder().encodeToString(data.getBytes()) + ":" + sign;
         byte[] aesKey = Util.AES.generateKey();
         data = Util.AES.encrypt(data, aesKey);
         String encrypedKey = Util.RSA.encrypt(new String(aesKey), keyPrimitive);

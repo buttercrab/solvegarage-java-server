@@ -165,6 +165,7 @@ public class Util {
                 return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(encodedPublicKey));
             } catch (Exception e) {
                 Util.log("rsa", "Error on generating public key", Commands.ERR);
+                e.printStackTrace();
             }
             return null;
         }
@@ -180,7 +181,7 @@ public class Util {
             try {
                 return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encodedPrivateKey));
             } catch (Exception e) {
-                Util.log("rsa", "Error on generating public key", Commands.ERR);
+                Util.log("rsa", "Error on generating private key", Commands.ERR);
             }
             return null;
         }
