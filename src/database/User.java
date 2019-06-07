@@ -214,6 +214,37 @@ public class User {
         return new Pair<>(false, 0);
     }
 
+    public synchronized Pair<Boolean, Integer> setImage(String id, String tk, String img) {
+        try {
+            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
+            if (rs.next()) {
+                String t = rs.getString("token");
+                if (t.equals(tk)) {
+                    this.st.executeUpdate("UPDATE user SET img='" + img + "' WHERE id='+id+'");
+                    return new Pair<>(true, -1);
+                }
+                return new Pair<>(false, 2);
+            }
+            return new Pair<>(false, 1);
+        } catch (SQLException e) {
+            Util.log("database", "Error on setting image with id: " + id, Commands.ERR);
+        }
+        return new Pair<>(false, 0);
+    }
+
+    public synchronized Pair<Boolean, Object> getImage(String id) {
+        try {
+            ResultSet rs = this.st.executeQuery("SELECT img FROM user WHERE id='" + id + "'");
+            if (rs.next()) {
+                return new Pair<>(true, rs.getString("img"));
+            }
+            return new Pair<>(false, 1);
+        } catch (SQLException e) {
+            Util.log("database", "Error on getting image with id: " + id, Commands.ERR);
+        }
+        return new Pair<>(false, 0);
+    }
+
     /**
      * Close the connection to MySQL server.
      * Used when shutting down the server.

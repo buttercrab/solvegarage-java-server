@@ -44,6 +44,7 @@ public class Server {
         Server.server.createContext("/logout", new LogoutHandler());
         Server.server.createContext("/delete-account", new DeleteAccountHandler());
         Server.server.createContext("/search", new SearchHandler());
+        Server.server.createContext("/profile-image", new ProfileImageHandler());
 
         Server.server.start();
 
