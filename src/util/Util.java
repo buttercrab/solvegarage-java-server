@@ -122,8 +122,8 @@ public class Util {
         public static boolean verify(String token, String saved) {
             String[] savedParts = saved.split("[:]");
             if (!token.equals(saved)) return false;
-            long curTiem = System.currentTimeMillis();
-            return Long.valueOf(savedParts[2]) <= curTiem && curTiem - Long.valueOf(savedParts[2]) < 24 * 60 * 60 * 1000;
+            long curTime = System.currentTimeMillis();
+            return Long.valueOf(savedParts[2]) <= curTime && curTime - Long.valueOf(savedParts[2]) < 24 * 60 * 60 * 1000;
         }
     }
 
@@ -137,7 +137,7 @@ public class Util {
     public static class RSA {
 
         /**
-         * Generates the RSA key pair length of 2048
+         * generates the RSA key pair length of 2048
          *
          * @return generated key pair
          */
@@ -297,7 +297,7 @@ public class Util {
          * Generates the random key for AES256.
          * Key would be 256 bytes long.
          *
-         * @return byte array of datas
+         * @return byte array of data
          */
 
         public static byte[] generateKey() {
