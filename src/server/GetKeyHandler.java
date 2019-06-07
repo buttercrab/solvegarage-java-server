@@ -10,6 +10,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class GetKeyHandler implements HttpHandler {
+
+    /**
+     * Sends a server's public RSA key to use.
+     *
+     * @param exchange http exchange object
+     * @throws IOException when something goes wrong
+     */
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (exchange.getRequestMethod().equals("GET")) {
