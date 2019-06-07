@@ -55,10 +55,6 @@ public class Server {
             Util.log("server", "Please restart the server", Commands.ERR);
         }
 
-        String a = Util.RSA.encrypt("aaa", keyPair.getPublic().getEncoded());
-        System.out.println(a);
-        System.out.println(Util.RSA.decrypt(a, keyPair.getPrivate().getEncoded()));
-
         Util.log("server", "Server started on port " + Server.port, Commands.LOG);
     }
 }
