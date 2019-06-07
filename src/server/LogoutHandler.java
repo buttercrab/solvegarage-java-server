@@ -7,6 +7,8 @@ import javafx.util.Pair;
 import util.Util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LogoutHandler extends SecureHttpHandler {
 
@@ -48,7 +50,8 @@ public class LogoutHandler extends SecureHttpHandler {
             res += ",'code':'" + t.getValue() + "'}";
 
         if (Server.debugLevel >= 2) {
-            Util.log("server", "/logout POST 200 id='" + id + "'", Commands.LOG);
+            Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                    " /logout POST 200 id='" + id + "' response='" + res + "'", Commands.LOG);
         }
 
         super.send(exchange, res, root.getValue());

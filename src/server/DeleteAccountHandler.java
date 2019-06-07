@@ -7,6 +7,8 @@ import javafx.util.Pair;
 import util.Util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DeleteAccountHandler extends SecureHttpHandler {
 
@@ -48,7 +50,8 @@ public class DeleteAccountHandler extends SecureHttpHandler {
             res += "}";
 
         if (Server.debugLevel >= 2) {
-            Util.log("server", "/delete-account POST 200 id='" + id + "'", Commands.LOG);
+            Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                    " /delete-account POST 200 id='" + id + "' response='" + res + "'", Commands.LOG);
         }
 
         super.send(exchange, res, root.getValue());
