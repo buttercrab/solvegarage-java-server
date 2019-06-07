@@ -14,6 +14,17 @@ import java.util.Base64;
 
 public class SecureHttpConnection {
 
+    /**
+     * Secure http post request for server's requirement.
+     *
+     * @param url             url to send
+     * @param data            data to send
+     * @param serverPublicKey server's public RSA key to send
+     * @param clientKey       client's RSA keyPair to send
+     * @return JSON object gotten
+     * @throws Exception when something goes wrong
+     */
+
     public static JsonObject post(String url, String data, byte[] serverPublicKey, KeyPair clientKey) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();

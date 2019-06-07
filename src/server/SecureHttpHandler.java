@@ -29,9 +29,12 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <ol>
      * <li> Stringify the JSON file to send
      * <li> Encode the json string by base64
-     * <li> Make RSA key pair
+     * <li> Make random string for AES key
      * <li> Make string with format {public key(encoded base64)}:{text(encoded base64)}:{signature}
-     * <li> Encrypt the string above with public key gotten from server
+     * <li> Encrypt the formatted string with AES key
+     * <li> Make RSA key pair
+     * <li> Encrypt the AES key with server public RSA key
+     * <li> Make string with format {encrypted AES key}:{encrypted data}
      * </ol>
      *
      * @param exchange exchange object for connection
@@ -73,9 +76,12 @@ public abstract class SecureHttpHandler implements HttpHandler {
      * <p>
      * <h1>Instructions to get txt from server</h1>
      * <ol>
-     * <li> Decrypt the decoded text with client's private key
-     * <li> Then the text would be the format {text}:{signature}
-     * <li> Then verify the signature with server's public key just in case
+     * <li> Text would be format {encrypted AES key}:{encrypted data}
+     * <li> Decrypt the AES key with client's private RSA key
+     * <li> Decrypt the data with AES key
+     * <li> Data would be format {data (encoded base64)}:{signature}
+     * <li> Verify signature with server's public RSA key
+     * <li> Decode the data with base64
      * </ol>
      *
      * @param exchange http exchange object
