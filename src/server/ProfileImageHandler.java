@@ -7,6 +7,8 @@ import util.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +23,14 @@ public class ProfileImageHandler extends SecureHttpHandler {
             Pair<Boolean, Object> t = Server.user.getImage((String) params.get("id"));
             String res = "{'success':" + t.getKey();
             if (t.getKey())
-                res += "'img':'" + t.getValue() + "'}";
+                res += ",'img':'" + t.getValue() + "'}";
             else
-                res += "'code':" + t.getValue() + "}";
+                res += ",'code':" + t.getValue() + "}";
+
+            if (Server.debugLevel >= 2) {
+                Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                        " /profile-image GET 200 id='" + params.get("id") + "' response='" + res + "'", Commands.LOG);
+            }
 
             exchange.sendResponseHeaders(200, res.length());
             OutputStream os = exchange.getResponseBody();
@@ -42,6 +49,11 @@ public class ProfileImageHandler extends SecureHttpHandler {
                 res += "}";
             else
                 res += ",'code':'" + t.getValue() + "'}";
+
+            if (Server.debugLevel >= 2) {
+                Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                        " /profile-image POST 200 id='" + id + "' response='" + res + "'", Commands.LOG);
+            }
 
             super.send(exchange, res, root.getValue());
         }

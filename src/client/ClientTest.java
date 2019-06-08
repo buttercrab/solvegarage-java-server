@@ -1,6 +1,7 @@
 package client;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import server.Commands;
 import util.Util;
 
@@ -25,23 +26,43 @@ public class ClientTest {
         root = SecureHttpConnection.post("http://localhost:3080/delete-account", "{'id':'test','pw':'test'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("delete-account", root.toString(), Commands.LOG);
+        assert root.get("success").getAsBoolean();
 
         root = SecureHttpConnection.post("http://localhost:3080/register", "{'id':'test','pw':'test'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("register", root.toString(), Commands.LOG);
+        assert root.get("success").getAsBoolean();
 
         root = SecureHttpConnection.post("http://localhost:3080/login", "{'id':'test','pw':'test'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("login", root.toString(), Commands.LOG);
         String token = root.get("token").getAsString();
+        assert root.get("success").getAsBoolean();
 
         root = SecureHttpConnection.post("http://localhost:3080/login", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("login-as-token", root.toString(), Commands.LOG);
         token = root.get("token").getAsString();
+        assert root.get("success").getAsBoolean();
+
+        root = SecureHttpConnection.post("http://localhost:3080/profile-image", "{'id':'test','tk':'" + token + "','img':'Hello, World!'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
+        assert root != null;
+        Util.log("profile-image", root.toString(), Commands.LOG);
+        assert root.get("success").getAsBoolean();
 
         root = SecureHttpConnection.post("http://localhost:3080/logout", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("logout", root.toString(), Commands.LOG);
+        assert root.get("success").getAsBoolean();
+
+        url = new URL("http://localhost:3080/profile-image?id=test");
+        con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        root = new JsonParser().parse(new BufferedReader(new InputStreamReader(con.getInputStream())).readLine()).getAsJsonObject();
+        Util.log("profile-image", root.toString(), Commands.LOG);
+        assert root.get("success").getAsBoolean();
+        assert root.get("img").getAsString().equals("Hello, World!");
+
+        Util.log("clinet", "All test are successful", Commands.LOG);
     }
 }

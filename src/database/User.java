@@ -133,7 +133,7 @@ public class User {
         try {
             ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
-                String saved = rs.getString("tk");
+                String saved = rs.getString("token");
                 if (!rs.wasNull() && Util.token.verify(token, saved)) {
                     token = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
@@ -167,7 +167,7 @@ public class User {
         try {
             ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
-                if (tk.equals(rs.getString("tk")) && !rs.wasNull()) {
+                if (tk.equals(rs.getString("token")) && !rs.wasNull()) {
                     this.st.executeUpdate("UPDATE user SET token=NULL WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
@@ -219,8 +219,8 @@ public class User {
             ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String t = rs.getString("token");
-                if (t.equals(tk)) {
-                    this.st.executeUpdate("UPDATE user SET img='" + img + "' WHERE id='+id+'");
+                if (!rs.wasNull() && t.equals(tk)) {
+                    this.st.executeUpdate("UPDATE user SET img='" + img + "' WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
                 return new Pair<>(false, 2);
