@@ -45,7 +45,7 @@ public class ClientTest {
         token = root.get("token").getAsString();
         assert root.get("success").getAsBoolean();
 
-        root = SecureHttpConnection.post("http://localhost:3080/profile-image", "{'id':'test','token':'" + token + "','img':'Hello, World!'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
+        root = SecureHttpConnection.post("http://localhost:3080/profile-image", "{'id':'test','token':'" + token + "','img':'" + Base64.getEncoder().encodeToString("Hello, World!".getBytes()) + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("profile-image", root.toString(), Commands.LOG);
         token = root.get("token").getAsString();
@@ -62,7 +62,7 @@ public class ClientTest {
         root = new JsonParser().parse(new BufferedReader(new InputStreamReader(con.getInputStream())).readLine()).getAsJsonObject();
         Util.log("profile-image", root.toString(), Commands.LOG);
         assert root.get("success").getAsBoolean();
-        assert root.get("img").getAsString().equals("Hello, World!");
+        assert new String(Base64.getDecoder().decode(root.get("img").getAsString())).equals("Hello, World!");
 
         Util.log("client", "All test are successful", Commands.LOG);
     }

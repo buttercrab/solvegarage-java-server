@@ -5,7 +5,11 @@ import server.Commands;
 import server.Server;
 import util.Util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.*;
+import java.util.Base64;
 
 public class User {
 
@@ -222,13 +226,19 @@ public class User {
                 if (!rs.wasNull() && t.equals(tk)) {
                     t = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
-                    this.st.executeUpdate("UPDATE user SET img='" + img + "' WHERE id='" + id + "'");
+                    File file = new File("./data/profile-img/" + id + ".png");
+                    file.createNewFile();
+                    FileOutputStream out = new FileOutputStream(file);
+                    out.write(Base64.getDecoder().decode(img));
+                    out.flush();
+                    out.close();
+
                     return new Pair<>(true, t);
                 }
                 return new Pair<>(false, 2);
             }
             return new Pair<>(false, 1);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             Util.log("database", "Error on setting image with id: " + id, Commands.ERR);
         }
         return new Pair<>(false, 0);
@@ -236,9 +246,19 @@ public class User {
 
     public synchronized Pair<Boolean, Object> getImage(String id) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT img FROM user WHERE id='" + id + "'");
+            ResultSet rs = this.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
             if (rs.next()) {
-                return new Pair<>(true, rs.getString("img"));
+                try {
+                    File file = new File("./data/profile-img/" + id + ".png");
+                    byte[] data = new byte[(int) file.length()];
+                    FileInputStream in = new FileInputStream(file);
+                    assert in.read(data, 0, (int) file.length()) == file.length();
+                    in.close();
+
+                    return new Pair<>(true, Base64.getEncoder().encodeToString(data));
+                } catch (Exception e) {
+                    return new Pair<>(false, 2);
+                }
             }
             return new Pair<>(false, 1);
         } catch (SQLException e) {
