@@ -227,6 +227,7 @@ public class User {
                     t = Util.token.generate(id);
                     this.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
                     File file = new File("./data/profile-img/" + id + ".png");
+                    //noinspection ResultOfMethodCallIgnored
                     file.createNewFile();
                     FileOutputStream out = new FileOutputStream(file);
                     out.write(Base64.getDecoder().decode(img));
@@ -252,6 +253,7 @@ public class User {
                     File file = new File("./data/profile-img/" + id + ".png");
                     byte[] data = new byte[(int) file.length()];
                     FileInputStream in = new FileInputStream(file);
+                    //noinspection ResultOfMethodCallIgnored
                     in.read(data);
                     in.close();
 
