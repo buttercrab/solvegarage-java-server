@@ -39,18 +39,18 @@ public class ClientTest {
         String token = root.get("token").getAsString();
         assert root.get("success").getAsBoolean();
 
-        root = SecureHttpConnection.post("http://localhost:3080/login", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
+        root = SecureHttpConnection.post("http://localhost:3080/login", "{'id':'test','token':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("login-as-token", root.toString(), Commands.LOG);
         token = root.get("token").getAsString();
         assert root.get("success").getAsBoolean();
 
-        root = SecureHttpConnection.post("http://localhost:3080/profile-image", "{'id':'test','tk':'" + token + "','img':'Hello, World!'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
+        root = SecureHttpConnection.post("http://localhost:3080/profile-image", "{'id':'test','token':'" + token + "','img':'Hello, World!'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("profile-image", root.toString(), Commands.LOG);
         assert root.get("success").getAsBoolean();
 
-        root = SecureHttpConnection.post("http://localhost:3080/logout", "{'id':'test','tk':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
+        root = SecureHttpConnection.post("http://localhost:3080/logout", "{'id':'test','token':'" + token + "'}", serverPublicKey, Objects.requireNonNull(Util.RSA.generateKeyPair()));
         assert root != null;
         Util.log("logout", root.toString(), Commands.LOG);
         assert root.get("success").getAsBoolean();
