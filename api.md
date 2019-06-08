@@ -24,7 +24,7 @@ fail code:
 Posts the id and password or token to server. You can login with token.
 
 1. `{'id':'test','pw':'test'}`
-1. `{'id':'test','tk':'TOKEN_FOR_TEST'}`
+1. `{'id':'test','token':'TOKEN_FOR_TEST'}`
 
 Then response would be like this.
 
@@ -43,7 +43,7 @@ fail code:
 
 Posts the id and token to server. You can login with token.
 
-1. `{'id':'test','tk':'TOKEN_FOR_TEST'}`
+1. `{'id':'test','token':'TOKEN_FOR_TEST'}`
 
 Then response would be like this.
 
@@ -100,11 +100,11 @@ fail code:
 
 Posts the image of profile image.
 
-1. `{'id':'test','tk':TOKEN_FOR_TEST}`
+1. `{'id':'test','token':TOKEN_FOR_TEST}`
 
 Then response would be like this.
 
-1. `{'success':true}`
+1. `{'success':true,'token':RENEWED_TOKEN}`
 when login was a success
 1. `{'success':false,'code':ERR_CODE}`
 when login was failed
