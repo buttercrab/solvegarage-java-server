@@ -252,7 +252,7 @@ public class User {
                     File file = new File("./data/profile-img/" + id + ".png");
                     byte[] data = new byte[(int) file.length()];
                     FileInputStream in = new FileInputStream(file);
-                    assert in.read(data, 0, (int) file.length()) == file.length();
+                    in.read(data);
                     in.close();
 
                     return new Pair<>(true, Base64.getEncoder().encodeToString(data));
