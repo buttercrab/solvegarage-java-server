@@ -40,13 +40,13 @@ public class ProfileImageHandler extends SecureHttpHandler {
             Pair<JsonObject, Byte[]> root = super.handleInit(exchange);
 
             String id = root.getKey().get("id").getAsString();
-            String tk = root.getKey().get("tk").getAsString();
+            String tk = root.getKey().get("token").getAsString();
             String img = root.getKey().get("img").getAsString();
 
-            Pair<Boolean, Integer> t = Server.user.setImage(id, tk, img);
+            Pair<Boolean, Object> t = Server.user.setImage(id, tk, img);
             String res = "{'success':" + t.getKey();
             if (t.getKey())
-                res += "}";
+                res += ",'token':'" + t.getValue() + "'}";
             else
                 res += ",'code':'" + t.getValue() + "'}";
 

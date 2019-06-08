@@ -63,6 +63,6 @@ public class ClientTest {
         assert root.get("success").getAsBoolean();
         assert root.get("img").getAsString().equals("Hello, World!");
 
-        Util.log("clinet", "All test are successful", Commands.LOG);
+        Util.log("client", "All test are successful", Commands.LOG);
     }
 }

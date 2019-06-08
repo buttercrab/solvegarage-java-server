@@ -23,7 +23,6 @@ public class LoginHandler extends SecureHttpHandler {
      * <ul>
      * <li> `id` id to login
      * <li> `pw` encrypted password to login
-     * <li> `key` key to encrypt token when login is success
      * </ul>
      * When the login is success, it will send back
      * JSON object that has `success`, `token` property
@@ -49,7 +48,7 @@ public class LoginHandler extends SecureHttpHandler {
             String pw = root.getKey().get("pw").getAsString();
             t = Server.user.login(id, pw);
         } else {
-            String tk = root.getKey().get("tk").getAsString();
+            String tk = root.getKey().get("token").getAsString();
             t = Server.user.loginWithToken(id, tk);
         }
         String res = "{'success':" + t.getKey() + "";

@@ -22,7 +22,7 @@ public class DeleteAccountHandler extends SecureHttpHandler {
      * and `key` property.
      * <ul>
      * <li> `id` id to delete-account
-     * <li> `key` key to encrypt token when delete-account is success
+     * <li> `pw` password to delete-account
      * </ul>
      * When the delete-account is success, it will send back
      * JSON object that has `success` property

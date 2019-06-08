@@ -214,14 +214,16 @@ public class User {
         return new Pair<>(false, 0);
     }
 
-    public synchronized Pair<Boolean, Integer> setImage(String id, String tk, String img) {
+    public synchronized Pair<Boolean, Object> setImage(String id, String tk, String img) {
         try {
             ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String t = rs.getString("token");
                 if (!rs.wasNull() && t.equals(tk)) {
+                    t = Util.token.generate(id);
+                    this.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
                     this.st.executeUpdate("UPDATE user SET img='" + img + "' WHERE id='" + id + "'");
-                    return new Pair<>(true, -1);
+                    return new Pair<>(true, t);
                 }
                 return new Pair<>(false, 2);
             }

@@ -22,8 +22,7 @@ public class LogoutHandler extends SecureHttpHandler {
      * and `key` property.
      * <ul>
      * <li> `id` id to logout
-     * <li> `tk` token to logout
-     * <li> `key` key to encrypt token when logout is success
+     * <li> `token` token to logout
      * </ul>
      * When the logout is success, it will send back
      * JSON object that has `success` property
@@ -42,7 +41,7 @@ public class LogoutHandler extends SecureHttpHandler {
         if (root == null) return;
 
         String id = root.getKey().get("id").getAsString();
-        String tk = root.getKey().get("tk").getAsString();
+        String tk = root.getKey().get("token").getAsString();
 
         Pair<Boolean, Integer> t = Server.user.logout(id, tk);
         String res = "{'success':" + t.getKey();
