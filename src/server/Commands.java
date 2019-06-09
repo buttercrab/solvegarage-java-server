@@ -69,7 +69,7 @@ public class Commands extends Thread {
     }
 
     /**
-     * Functoin to log to stdout using the format `[{from}] {s}`. `type` would differ
+     * Function to log to stdout using the format `[{from}] {s}`. `type` would differ
      * the color. It uses ANSI escape code to output the color. Following list is the
      * type to color.
      * <ul>
