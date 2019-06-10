@@ -1,6 +1,7 @@
 package server;
 
 import com.sun.net.httpserver.HttpServer;
+import database.Database;
 import database.User;
 import util.Util;
 
@@ -23,7 +24,7 @@ public class Server {
      * 2: debug level (some log printed)
      */
 
-    static int debugLevel = 1;
+    static int debugLevel = 2;
 
     /**
      * Main function of this server. It starts the server and connect to MySQL database.
@@ -33,7 +34,7 @@ public class Server {
      */
 
     public static void main(String[] args) throws IOException {
-        Server.user.init(args[0], args[1]);
+        Database.init(args[0], args[1]);
         Server.cmd.start();
 
         Server.server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -43,7 +44,6 @@ public class Server {
         Server.server.createContext("/register", new RegisterHandler());
         Server.server.createContext("/logout", new LogoutHandler());
         Server.server.createContext("/delete-account", new DeleteAccountHandler());
-        Server.server.createContext("/search", new SearchHandler());
         Server.server.createContext("/profile-image", new ProfileImageHandler());
 
         Server.server.start();

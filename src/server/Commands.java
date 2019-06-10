@@ -1,5 +1,7 @@
 package server;
 
+import database.Database;
+
 import java.util.Scanner;
 
 /**
@@ -110,7 +112,7 @@ public class Commands extends Thread {
     public void quit() {
         this.finished = true;
         Server.server.stop(0);
-        Server.user.quit();
+        Database.quit();
         this.log("server", "Shutting down server...", Commands.LOG);
         System.exit(0);
     }

@@ -2,44 +2,16 @@ package database;
 
 import javafx.util.Pair;
 import server.Commands;
-import server.Server;
 import util.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Base64;
 
 public class User {
-
-    private Connection conn = null;
-    private Statement st = null;
-
-    /**
-     * Connects to local MySQL server and make connection and statement.
-     * Have to be called when starting the server.
-     *
-     * @param id id to login to local MySQL server
-     * @param pw password to login to local MySQL server
-     */
-
-    public void init(String id, String pw) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/solvegarage_java?characterEncoding=UTF-8&serverTimezone=UTC", id, pw);
-
-            this.st = conn.createStatement();
-
-            Util.log("database", "Succeeded on connecting to MySQL server.", Commands.LOG);
-        } catch (ClassNotFoundException e) {
-            Util.log("database", "Driver not found", Commands.ERR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ((Commands) Server.cmd).quit();
-        }
-    }
 
     /**
      * Method to make new account. Gets the id and password and make new account
@@ -63,10 +35,10 @@ public class User {
 
     public synchronized Pair<Boolean, Object> register(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
             if (!rs.next()) {
                 String token = Util.token.generate(id);
-                this.st.executeUpdate("INSERT INTO user (id, pw, token) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
+                Database.st.executeUpdate("INSERT INTO user (id, pw, token) VALUES ('" + id + "', '" + pw + "', '" + token + "')");
                 return new Pair<>(true, token);
             }
             return new Pair<>(false, 1);
@@ -99,12 +71,12 @@ public class User {
 
     public synchronized Pair<Boolean, Object> login(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String _pw = rs.getString("pw");
                 if (_pw.equals(pw)) {
                     String token = Util.token.generate(id);
-                    this.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
+                    Database.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
                 }
                 return new Pair<>(false, 2);
@@ -135,12 +107,12 @@ public class User {
 
     public synchronized Pair<Boolean, Object> loginWithToken(String id, String token) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String saved = rs.getString("token");
                 if (!rs.wasNull() && Util.token.verify(token, saved)) {
                     token = Util.token.generate(id);
-                    this.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
+                    Database.st.executeUpdate("UPDATE user SET token='" + token + "' WHERE id='" + id + "'");
                     return new Pair<>(true, token);
                 }
                 return new Pair<>(false, 2);
@@ -169,10 +141,10 @@ public class User {
 
     public synchronized Pair<Boolean, Integer> logout(String id, String tk) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 if (tk.equals(rs.getString("token")) && !rs.wasNull()) {
-                    this.st.executeUpdate("UPDATE user SET token=NULL WHERE id='" + id + "'");
+                    Database.st.executeUpdate("UPDATE user SET token=NULL WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
                 return new Pair<>(false, 2);
@@ -202,11 +174,11 @@ public class User {
 
     public synchronized Pair<Boolean, Integer> deleteAccount(String id, String pw) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT pw FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String p = rs.getString("pw");
                 if (p.equals(pw)) {
-                    this.st.executeUpdate("DELETE FROM user WHERE id='" + id + "'");
+                    Database.st.executeUpdate("DELETE FROM user WHERE id='" + id + "'");
                     return new Pair<>(true, -1);
                 }
                 return new Pair<>(false, 2);
@@ -220,12 +192,12 @@ public class User {
 
     public synchronized Pair<Boolean, Object> setImage(String id, String tk, String img) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 String t = rs.getString("token");
                 if (!rs.wasNull() && t.equals(tk)) {
                     t = Util.token.generate(id);
-                    this.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
+                    Database.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
                     File file = new File("./data/profile-img/" + id + ".png");
                     //noinspection ResultOfMethodCallIgnored
                     file.createNewFile();
@@ -247,7 +219,7 @@ public class User {
 
     public synchronized Pair<Boolean, Object> getImage(String id) {
         try {
-            ResultSet rs = this.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
+            ResultSet rs = Database.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 try {
                     File file = new File("./data/profile-img/" + id + ".png");
@@ -267,19 +239,5 @@ public class User {
             Util.log("database", "Error on getting image with id: " + id, Commands.ERR);
         }
         return new Pair<>(false, 0);
-    }
-
-    /**
-     * Close the connection to MySQL server.
-     * Used when shutting down the server.
-     */
-
-    public void quit() {
-        try {
-            this.st.close();
-            this.conn.close();
-        } catch (SQLException e) {
-            Util.log("database", "Error closing database connection", Commands.ERR);
-        }
     }
 }
