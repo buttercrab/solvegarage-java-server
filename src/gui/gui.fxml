@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="700.0" maxWidth="700.0" minHeight="700.0" minWidth="700.0"
+      prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.999-ea" fx:controller="gui.Main">
+    <children>
+        <Label text="Server">
+            <VBox.margin>
+                <Insets left="329.5"/>
+            </VBox.margin>
+        </Label>
+        <HBox prefHeight="500.0" prefWidth="700.0">
+            <children>
+                <TableView prefHeight="500.0" prefWidth="500.0">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="C1"/>
+                        <TableColumn prefWidth="75.0" text="C2"/>
+                    </columns>
+                    <HBox.margin>
+                        <Insets left="100.0" right="100.0"/>
+                    </HBox.margin>
+                </TableView>
+            </children>
+        </HBox>
+        <TextArea prefHeight="200.0" prefWidth="200.0"/>
+    </children>
+</VBox>
