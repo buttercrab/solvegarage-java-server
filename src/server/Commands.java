@@ -103,6 +103,7 @@ public class Commands extends Thread {
         if (from.length() > 0) from = "[" + from + "]";
         System.out.println("\r" + color + from + " " + s + "\033[0m");
         System.out.print("> ");
+        System.out.flush();
     }
 
     /**

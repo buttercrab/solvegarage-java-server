@@ -8,14 +8,17 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    static String[] main_args;
+
     public static void main(String[] args) {
+        main_args = args;
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Solvegarage Server");
         primaryStage.setScene(new Scene(root, 700, 700));
         primaryStage.show();
     }

@@ -198,7 +198,7 @@ public class User {
                 if (!rs.wasNull() && t.equals(tk)) {
                     t = Util.token.generate(id);
                     Database.st.executeUpdate("UPDATE user SET token='" + t + "' WHERE id='" + id + "'");
-                    File file = new File("./data/profile-img/" + id + ".png");
+                    File file = new File("/Users/jaeyong/Github/solvegarage-java/data/profile-img/" + id + ".png");
                     //noinspection ResultOfMethodCallIgnored
                     file.createNewFile();
                     FileOutputStream out = new FileOutputStream(file);
@@ -222,7 +222,7 @@ public class User {
             ResultSet rs = Database.st.executeQuery("SELECT id FROM user WHERE id='" + id + "'");
             if (rs.next()) {
                 try {
-                    File file = new File("./data/profile-img/" + id + ".png");
+                    File file = new File("/Users/jaeyong/Github/solvegarage-java/data/profile-img/" + id + ".png");
                     byte[] data = new byte[(int) file.length()];
                     FileInputStream in = new FileInputStream(file);
                     //noinspection ResultOfMethodCallIgnored

@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="700.0" maxWidth="700.0" minHeight="700.0" minWidth="700.0"
-      prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.999-ea" fx:controller="gui.Main">
+      prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.999-ea" fx:controller="gui.Controller">
     <children>
         <Label text="Server">
             <VBox.margin>
-                <Insets left="329.5"/>
+                <Insets left="306.5"/>
             </VBox.margin>
+            <font>
+                <Font name="Fira Sans Regular" size="30.0"/>
+            </font>
         </Label>
-        <HBox prefHeight="500.0" prefWidth="700.0">
+        <TextArea fx:id="logArea" prefHeight="600.0" prefWidth="700.0"/>
+        <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                <TableView prefHeight="500.0" prefWidth="500.0">
-                    <columns>
-                        <TableColumn prefWidth="75.0" text="C1"/>
-                        <TableColumn prefWidth="75.0" text="C2"/>
-                    </columns>
+                <Button fx:id="startButton" mnemonicParsing="false" text="Start">
                     <HBox.margin>
-                        <Insets left="100.0" right="100.0"/>
+                        <Insets left="209.3" top="30.0"/>
                     </HBox.margin>
-                </TableView>
+                </Button>
+                <Button fx:id="stopButton" mnemonicParsing="false" text="Stop">
+                    <HBox.margin>
+                        <Insets left="185.83" top="30.0"/>
+                    </HBox.margin>
+                </Button>
             </children>
         </HBox>
-        <TextArea prefHeight="200.0" prefWidth="200.0"/>
     </children>
 </VBox>
