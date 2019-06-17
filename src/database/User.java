@@ -190,6 +190,23 @@ public class User {
         return new Pair<>(false, 0);
     }
 
+    /**
+     * Is sets the profile image to database
+     * It would send the response data
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: id is not found.
+     * <li> 2: token is not correct.
+     * </ul>
+     *
+     * @param id  id to change the image
+     * @param tk  token to verify
+     * @param img image data on base64 to save
+     * @return response data
+     */
+
     public synchronized Pair<Boolean, Object> setImage(String id, String tk, String img) {
         try {
             ResultSet rs = Database.st.executeQuery("SELECT token FROM user WHERE id='" + id + "'");
@@ -216,6 +233,20 @@ public class User {
         }
         return new Pair<>(false, 0);
     }
+
+    /**
+     * returns the image of id
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server error. An error occurred when processing login.
+     * <li> 1: id is not found.
+     * <li> 2: id exists but image was not found.
+     * </ul>
+     *
+     * @param id id to get image
+     * @return response data
+     */
 
     public synchronized Pair<Boolean, Object> getImage(String id) {
         try {
