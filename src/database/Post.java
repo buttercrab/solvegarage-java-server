@@ -9,6 +9,19 @@ import java.sql.SQLException;
 
 public class Post {
 
+    /**
+     * returns the problem data.
+     * <p>
+     * Failure codes
+     * <ul>
+     * <li> 0: Server Error
+     * <li> 1: Problem not found.
+     * </ul>
+     *
+     * @param problemID problem id to get
+     * @return response data
+     */
+
     public synchronized Pair<Boolean, Object> getProblem(int problemID) {
         try {
             ResultSet rs = Database.st.executeQuery("SELECT * FROM post WHERE id='" + problemID + "'");
