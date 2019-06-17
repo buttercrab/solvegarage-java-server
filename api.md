@@ -100,7 +100,7 @@ fail code:
 
 Posts the image of profile image.
 
-1. `{'id':'test','token':TOKEN_FOR_TEST}`
+1. `{'id':'test','token':TOKEN_FOR_TEST,'img':BASE_64_ENCODED_IMAGE}`
 
 Then response would be like this.
 
