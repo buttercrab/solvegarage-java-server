@@ -95,7 +95,7 @@ public class User {
      * <p>
      * Failure codes
      * <ul>
-     * * <li> 0: Server error. An error occurred when processing login.
+     * <li> 0: Server error. An error occurred when processing login.
      * <li> 1: id is not found.
      * <li> 2: Token is not correct.
      * </ul>
@@ -136,6 +136,7 @@ public class User {
      * </ul>
      *
      * @param id id to logout
+     * @param tk token to verify
      * @return Pair with if register succeeded and code or token
      */
 
