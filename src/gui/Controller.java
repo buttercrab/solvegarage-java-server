@@ -74,11 +74,11 @@ public class Controller implements Initializable {
             while (isRunning) {
                 try {
                     String line = br.readLine();
-                    if (line == null) {
+                    addLog(line);
+                    if (!process.isAlive()) {
                         Platform.exit();
                         return;
                     }
-                    addLog(line);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
