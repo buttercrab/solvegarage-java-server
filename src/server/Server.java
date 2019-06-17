@@ -2,6 +2,7 @@ package server;
 
 import com.sun.net.httpserver.HttpServer;
 import database.Database;
+import database.Post;
 import database.User;
 import util.Util;
 
@@ -14,6 +15,7 @@ public class Server {
 
     private static int port = 3080;
     static User user = new User();
+    static Post post = new Post();
     public static Thread cmd = new Commands();
     static HttpServer server;
     static KeyPair keyPair;
@@ -45,6 +47,7 @@ public class Server {
         Server.server.createContext("/logout", new LogoutHandler());
         Server.server.createContext("/delete-account", new DeleteAccountHandler());
         Server.server.createContext("/profile-image", new ProfileImageHandler());
+        Server.server.createContext("/problem", new ProblemHandler());
 
         Server.server.start();
 

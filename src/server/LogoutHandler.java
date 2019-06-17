@@ -19,7 +19,7 @@ public class LogoutHandler extends SecureHttpHandler {
      * {@link User#logout(String, String)}
      * <p>
      * input is JSON object from client that has `id`,
-     * and `key` property.
+     * and `token` property.
      * <ul>
      * <li> `id` id to logout
      * <li> `token` token to logout

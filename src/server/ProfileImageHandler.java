@@ -13,6 +13,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileImageHandler extends SecureHttpHandler {
+
+    /**
+     * This method is used for handing profile image requests.
+     * Using GET Method, it returns the image file with png data
+     * with Base64 encoded.
+     * <p>
+     * Input is url with parameters that has id
+     * <p>
+     * When request is success, it will send back
+     * JSON object that has `success` property.
+     * <ul>
+     * <li> `success` true if request succeeded
+     * <li> `img` that has image data encoded
+     * <li> `code` failure code when request failed
+     * </ul>
+     * <p>
+     * Using POST Method, it sets the profile image with given id.
+     * <p>
+     * input is JSON object from client that has `id`,
+     * and `token` property.
+     * <ul>
+     * <li> `id` id to post
+     * <li> `token` token to logout
+     * <li> `img` data to post
+     * </ul>
+     * When the logout is success, it will send back
+     * JSON object that has `success` property
+     * <ul>
+     * <li> `success` true if logout succeeded
+     * <li> `code` failure code when logout failed
+     * <li> `token` with new token
+     * </ul>
+     *
+     * @param exchange http exchange object
+     * @throws IOException when something goes wrong
+     */
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if (exchange.getRequestMethod().equals("GET")) {
