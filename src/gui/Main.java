@@ -6,6 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class for JavaFX application
+ */
+
 public class Main extends Application {
 
     static String[] main_args;

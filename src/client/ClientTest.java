@@ -14,6 +14,23 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * Client test for server
+ * <p>
+ * When this test fail, the server is not perfect. Please do this test before publishing the server.
+ * <p>
+ * Tests to do.
+ * <ol>
+ * <li> /delete-account for test account
+ * <li> /register for test account
+ * <li> /login to test account
+ * <li> /login with token with token gotten
+ * <li> /profile-image reads the image and sends to server
+ * <li> /profile-image gets the image set
+ * <li> /logout the account
+ * </ol>
+ */
+
 public class ClientTest {
 
     public static void main(String[] args) throws Exception {

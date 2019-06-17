@@ -12,6 +12,12 @@ import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * JavaFX application controller
+ * <p>
+ * Runs the server by `Runtime` from outside and gets the output and prints to the screen.
+ */
+
 public class Controller implements Initializable {
 
     @FXML
@@ -55,6 +61,14 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Adds the log to the screen.
+     * <p>
+     * It modifies the string to better format
+     *
+     * @param s string to log
+     */
+
     private void addLog(String s) {
         s = s.replaceAll("[\\[][0-9]+[m]", "");
         s = s.replaceFirst("[\\s\\S]*[\r]", "");
@@ -65,6 +79,11 @@ public class Controller implements Initializable {
         logArea.setText(log);
     }
 
+    /**
+     * Class for getting output from server
+     * <p>
+     * When the server stops, it stops the application.
+     */
 
     class ServerHandler extends Thread {
 
