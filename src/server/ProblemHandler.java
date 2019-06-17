@@ -1,10 +1,12 @@
 package server;
 
+import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Base64;
 
 public class ProblemHandler extends SecureHttpHandler {
 
@@ -12,6 +14,10 @@ public class ProblemHandler extends SecureHttpHandler {
      * This method is used for handling problem requests.
      * Using GET Method, it sends JSON object that contains
      * `success` property
+     * <p>
+     * Using POST Method, it gets the new problem and saves
+     * to the database and sends back response JSON object
+     * that contains `success` property.
      *
      * @param exchange http exchange object
      * @throws IOException when something goes wrong
@@ -26,9 +32,9 @@ public class ProblemHandler extends SecureHttpHandler {
             String res = "{'success':" + t.getKey();
             if (t.getKey()) {
                 String[] s = (String[]) t.getValue();
-                res += ",'title':'" + s[0] + "'";
+                res += ",'title':'" + Base64.getEncoder().encodeToString(s[0].getBytes()) + "'";
                 res += ",'author':'" + s[1] + "'";
-                res += ",'body':'" + s[2] + "'";
+                res += ",'body':'" + Base64.getEncoder().encodeToString(s[2].getBytes()) + "'";
                 res += ",'date':'" + s[3] + "'}";
             } else
                 res += ",'code':" + t.getValue() + "}";
@@ -38,7 +44,22 @@ public class ProblemHandler extends SecureHttpHandler {
             os.write(res.getBytes());
             os.close();
         } else {
+            Pair<JsonObject, Byte[]> root = super.handleInit(exchange);
+            if (root == null) return;
 
+            String id = root.getKey().get("id").getAsString();
+            String tk = root.getKey().get("token").getAsString();
+            String title = new String(Base64.getDecoder().decode(root.getKey().get("title").getAsString()));
+            String body = new String(Base64.getDecoder().decode(root.getKey().get("body").getAsString()));
+
+            Pair<Boolean, Object> t = Server.post.setProblem(id, tk, title, body);
+            String res = "{'success':" + t.getKey();
+            if (t.getKey())
+                res += ",'token':'" + t.getValue() + "'}";
+            else
+                res += ",'code':" + t.getValue() + "}";
+
+            super.send(exchange, res, root.getValue());
         }
     }
 }
