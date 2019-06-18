@@ -3,10 +3,13 @@ package server;
 import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import javafx.util.Pair;
+import util.Util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 
 public class ProblemHandler extends SecureHttpHandler {
 
@@ -39,6 +42,11 @@ public class ProblemHandler extends SecureHttpHandler {
             } else
                 res += ",'code':" + t.getValue() + "}";
 
+            if (Server.debugLevel >= 2) {
+                Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                        " /problem GET 200 id='" + problemID + "' response='" + res + "'", Commands.LOG);
+            }
+
             exchange.sendResponseHeaders(200, res.length());
             OutputStream os = exchange.getResponseBody();
             os.write(res.getBytes());
@@ -58,6 +66,11 @@ public class ProblemHandler extends SecureHttpHandler {
                 res += ",'token':'" + t.getValue() + "'}";
             else
                 res += ",'code':" + t.getValue() + "}";
+
+            if (Server.debugLevel >= 2) {
+                Util.log("server", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) +
+                        " /problem POST 200 id='" + id + "' response='" + res + "'", Commands.LOG);
+            }
 
             super.send(exchange, res, root.getValue());
         }
